@@ -6,18 +6,7 @@ jobs:
   build:
     runs-on: self-hosted
     steps:
-    - name: Check GitHub token availability
-      run: |
-          if [ -z "${{ secrets.GITHUB_TOKEN }}" ]; then
-          echo "GITHUB_TOKEN is not available"
-          exit 1
-          else
-          echo "GITHUB_TOKEN is available"
-          fi
-
-    - name: Mark directory as safe for Git
-      run: git config --global --add safe.directory C:/Users/okacher/Documents/GitRepos/TAToolVergleich/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich
-    
+   
     - name: Check out repository
       uses: actions/checkout@v2
       
