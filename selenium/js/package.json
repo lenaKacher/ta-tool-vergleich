@@ -1,0 +1,19 @@
+{
+  "name": "selenium-js",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha *.js"
+  },
+  "author": "dhorn",
+  "license": "ISC",
+  "devDependencies": {
+    "@testcontainers/selenium": "^10.10.4",
+    "mocha": "^10.2.0",
+    "selenium-webdriver": "^4.22.0"
+  },
+  "dependencies": {
+    "chai": "^4.3.10"
+  }
+}
