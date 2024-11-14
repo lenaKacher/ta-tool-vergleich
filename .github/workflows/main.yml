@@ -8,5 +8,15 @@ jobs:
     steps:
     - name: Check out repository
       uses: actions/checkout@v2
+      
+    - name: Check GitHub token permissions
+      run: |
+          echo "GITHUB_TOKEN permissions check"
+          echo "Repository URL: ${{ github.repository }}"
+          echo "GITHUB_TOKEN: ${{ github.token }}"
+
+    - name: List files in workspace
+      run: ls -la ${{ github.workspace }}
+      
     - name: Run a script
-      run: echo "Hello from the self-hosted runner!"
+      run: echo "Hello from the self-hosted runner!!"
