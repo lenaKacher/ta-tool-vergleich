@@ -6,6 +6,8 @@ jobs:
   build:
     runs-on: self-hosted
     steps:
+    - name: Mark directory as safe for Git
+      run: git config --global --add safe.directory C:/Users/okacher/Documents/GitRepos/TAToolVergleich/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich
     - name: Check out repository
       uses: actions/checkout@v2
       
