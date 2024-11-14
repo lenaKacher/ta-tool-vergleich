@@ -1,0 +1,12 @@
+name: Test Self-hosted Runner
+
+on: [push]
+
+jobs:
+  build:
+    runs-on: self-hosted
+    steps:
+    - name: Check out repository
+      uses: actions/checkout@v2
+    - name: Run a script
+      run: echo "Hello from the self-hosted runner!"
