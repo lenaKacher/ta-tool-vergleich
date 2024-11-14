@@ -9,4 +9,4 @@ jobs:
     - name: Check out repository
       uses: actions/checkout@v2
     - name: Run a script
-      run: echo "Hello from the self-hosted runner!"
+      run: echo "Hello from the self-hosted runner!!"
