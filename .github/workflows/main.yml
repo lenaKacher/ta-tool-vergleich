@@ -36,9 +36,6 @@ jobs:
   selenium:
     name: Selenium Tests
     runs-on: self-hosted
-    defaults:
-      run:
-        shell: bash
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
@@ -63,9 +60,14 @@ jobs:
         run: |
           cd selenium/java
           mvn test-compile
-          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-            mvn clean test || true
-          done
+          $NUMBER_OF_RUNS = 5
+          for ($i = 1; $i -le $NUMBER_OF_RUNS; $i++) {
+            try {
+              mvn clean test
+            } catch {
+            Write-Host "Test failed, continuing..."
+            }
+          }
           cp timings.csv selenium-java.csv
 
       - name: Run Selenium Java - Page Objects Tests
