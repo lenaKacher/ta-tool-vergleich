@@ -10,7 +10,7 @@ on:
       RUN_SELENIUM_POP:
         description: "Run Selenium Page Object Pattern tests"
         required: false
-        default: "true"
+        default: "false"
       RUN_SELENIUM_JS:
         description: "Run Selenium JavaScript tests"
         required: false
@@ -37,20 +37,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Java and Maven
-        uses: actions/setup-java@v3
+      - name: Set up Dev Container CLI
+        uses: devcontainers/ci@v0
         with:
-          java-version: '17'
-          distribution: 'temurin'
+          devcontainer-path: .devcontainer/devcontainer.json
 
-      - name: Start Docker Services
-        run: docker-compose up -d
-
-      - name: Check Docker Version
-        run: docker --version
+      - name: Start Dev Container
+        run: |
+          devcontainer up --workspace-folder .
+          devcontainer exec --workspace-folder . -- docker --version
 
       - name: Verify Docker Daemon
-        run: docker info
+        run: |
+          devcontainer exec --workspace-folder . -- docker info
 
       - name: Debug Parameters
         run: |
@@ -64,17 +63,15 @@ jobs:
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
         run: |
-          cd selenium/java
-          mvn test-compile
-          $NUMBER_OF_RUNS = 5
-          docker-compose up -d
-          for ($i = 1; $i -le $NUMBER_OF_RUNS; $i++) {
-            try {
-              mvn clean test
-            } catch {
-            Write-Host "Test failed, continuing..."
-            }
-          }
+          devcontainer exec --workspace-folder . -- bash -c "
+            cd selenium/java
+            mvn test-compile
+            NUMBER_OF_RUNS=5
+            for i in \$(seq 1 \$NUMBER_OF_RUNS); do
+              mvn clean test || true
+            done
+            cp timings.csv selenium-java.csv
+          "
           cp timings.csv selenium-java.csv
 
       - name: Run Selenium Java - Page Objects Tests
@@ -96,7 +93,10 @@ jobs:
             npm test || true
           done
           cp timings.csv selenium-js.csv
-
+          
+      - name: Clean up
+        run: devcontainer down
+        
   playwright:
     name: Playwright Tests
     runs-on: self-hosted
