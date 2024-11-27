@@ -159,3 +159,6 @@ dist
 # recordings
 *.mp4
 timings.csv
+
+# GitHub Actions runner
+actions-runner/
