@@ -46,6 +46,15 @@ jobs:
           java-version: '11'
           distribution: 'temurin'
 
+      - name: Debug Parameters
+        run: |
+          echo "RUN_SELENIUM_JAVA=${{ inputs.RUN_SELENIUM_JAVA }}"
+          echo "RUN_SELENIUM_POP=${{ inputs.RUN_SELENIUM_POP }}"
+          echo "RUN_SELENIUM_JS=${{ inputs.RUN_SELENIUM_JS }}"
+          echo "RUN_PLAYWRIGHT_JAVA=${{ inputs.RUN_PLAYWRIGHT_JAVA }}"
+          echo "RUN_PLAYWRIGHT_JS=${{ inputs.RUN_PLAYWRIGHT_JS }}"
+          echo "RUN_CYPRESS_JS=${{ inputs.RUN_CYPRESS_JS }}"
+
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
         run: |
