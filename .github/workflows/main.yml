@@ -1,9 +1,6 @@
 name: Test Pipeline
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
     inputs:
       RUN_SELENIUM_JAVA:
@@ -46,6 +43,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
+      - name: Start Docker Services
+        run: docker-compose up -d
+
+      - name: Check Docker Version
+        run: docker --version
+
+      - name: Verify Docker Daemon
+        run: docker info
+
       - name: Debug Parameters
         run: |
           echo "RUN_SELENIUM_JAVA=${{ inputs.RUN_SELENIUM_JAVA }}"
@@ -61,6 +67,7 @@ jobs:
           cd selenium/java
           mvn test-compile
           $NUMBER_OF_RUNS = 5
+          docker-compose up -d
           for ($i = 1; $i -le $NUMBER_OF_RUNS; $i++) {
             try {
               mvn clean test
