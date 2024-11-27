@@ -4,6 +4,32 @@ on:
   push:
     branches:
       - main
+  workflow_dispatch:
+    inputs:
+      RUN_SELENIUM_JAVA:
+        description: "Run Selenium Java tests"
+        required: true
+        default: false
+      RUN_SELENIUM_POP:
+        description: "Run Selenium Page Object Pattern tests"
+        required: false
+        default: false
+      RUN_SELENIUM_JS:
+        description: "Run Selenium JavaScript tests"
+        required: false
+        default: false
+      RUN_PLAYWRIGHT_JAVA:
+        description: "Run Playwright Java tests"
+        required: false
+        default: false
+      RUN_PLAYWRIGHT_JS:
+        description: "Run Playwright JavaScript tests"
+        required: false
+        default: false
+      RUN_CYPRESS_JS:
+        description: "Run Cypress JavaScript tests"
+        required: false
+        default: false
   pull_request:
 
 jobs:
