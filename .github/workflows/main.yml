@@ -14,53 +14,41 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker
-        uses: addnab/docker-run-action@v3
+      - name: Set up Java and Maven
+        uses: actions/setup-java@v3
         with:
-          docker: docker
-          socket: true
+          java-version: '11'
+          distribution: 'temurin'
 
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
         run: |
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -w $GITHUB_WORKSPACE -u root \
-            maven:3.9.8 bash -c "
-              cd selenium/java && mvn test-compile &&
-              for i in {1..${{ inputs.NUMBER_OF_RUNS }}}; do
-                mvn clean test || true;
-              done &&
-              cp timings.csv selenium-java.csv
-            "
-          mv selenium/java/selenium-java.csv $GITHUB_WORKSPACE
-          echo "selenium-java.csv copied for archiving"
+          cd selenium/java
+          mvn test-compile
+          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+            mvn clean test || true
+          done
+          cp timings.csv selenium-java.csv
 
       - name: Run Selenium Java - Page Objects Tests
         if: ${{ inputs.RUN_SELENIUM_POP == 'true' }}
         run: |
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -w $GITHUB_WORKSPACE -u root \
-            maven:3.9.8 bash -c "
-              cd selenium/java_PageObjectPattern && mvn test-compile &&
-              for i in {1..${{ inputs.NUMBER_OF_RUNS }}}; do
-                mvn clean test || true;
-              done &&
-              cp timings.csv selenium-java-pop.csv
-            "
-          mv selenium/java_PageObjectPattern/selenium-java-pop.csv $GITHUB_WORKSPACE
-          echo "selenium-java-pop.csv copied for archiving"
+          cd selenium/java_PageObjectPattern
+          mvn test-compile
+          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+            mvn clean test || true
+          done
+          cp timings.csv selenium-java-pop.csv
 
       - name: Run Selenium JavaScript Tests
         if: ${{ inputs.RUN_SELENIUM_JS == 'true' }}
         run: |
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -w $GITHUB_WORKSPACE -u root \
-            node:20.15.1-bookworm bash -c "
-              cd selenium/js && npm ci &&
-              for i in {1..${{ inputs.NUMBER_OF_RUNS }}}; do
-                npm test || true;
-              done &&
-              cp timings.csv selenium-js.csv
-            "
-          mv selenium/js/selenium-js.csv $GITHUB_WORKSPACE
-          echo "selenium-js.csv copied for archiving"
+          cd selenium/js
+          npm ci
+          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+            npm test || true
+          done
+          cp timings.csv selenium-js.csv
 
   playwright:
     name: Playwright Tests
@@ -69,42 +57,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker
-        uses: addnab/docker-run-action@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          docker: docker
-          socket: true
+          node-version: '20.15.1'
 
       - name: Run Playwright Java Tests
         if: ${{ inputs.RUN_PLAYWRIGHT_JAVA == 'true' }}
         run: |
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -w $GITHUB_WORKSPACE -u root \
-            maven:3.9.8 bash -c "
-              cd playwright/java && mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args='install-deps' &&
-              mvn test-compile &&
-              for i in {1..${{ inputs.NUMBER_OF_RUNS }}}; do
-                mvn clean test || true;
-              done &&
-              cp timings.csv playwright-java.csv
-            "
-          mv playwright/java/playwright-java.csv $GITHUB_WORKSPACE
-          echo "playwright-java.csv copied for archiving"
+          cd playwright/java
+          mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install-deps"
+          mvn test-compile
+          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+            mvn clean test || true
+          done
+          cp timings.csv playwright-java.csv
 
       - name: Run Playwright JavaScript Tests
         if: ${{ inputs.RUN_PLAYWRIGHT_JS == 'true' }}
         run: |
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -w $GITHUB_WORKSPACE -u root \
-            node:20.15.1-bookworm bash -c "
-              cd playwright/js && npm ci &&
-              npx playwright install &&
-              npx playwright install-deps &&
-              for i in {1..${{ inputs.NUMBER_OF_RUNS }}}; do
-                npm run test || true;
-              done &&
-              cp timings.csv playwright-js.csv
-            "
-          mv playwright/js/playwright-js.csv $GITHUB_WORKSPACE
-          echo "playwright-js.csv copied for archiving"
+          cd playwright/js
+          npm ci
+          npx playwright install
+          npx playwright install-deps
+          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+            npm run test || true
+          done
+          cp timings.csv playwright-js.csv
 
   cypress:
     name: Cypress Tests
@@ -113,25 +92,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Set up Docker
-        uses: addnab/docker-run-action@v3
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
         with:
-          docker: docker
-          socket: true
+          node-version: '20.15.1'
 
       - name: Run Cypress Tests
         if: ${{ inputs.RUN_CYPRESS_JS == 'true' }}
         run: |
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock -w $GITHUB_WORKSPACE -u root \
-            cypress/base:20.15.1 bash -c "
-              cd cypress/js && npm ci &&
-              for i in {1..${{ inputs.NUMBER_OF_RUNS }}}; do
-                npm run test || true;
-              done &&
-              cp timings.csv cypress-js.csv
-            "
-          mv cypress/js/cypress-js.csv $GITHUB_WORKSPACE
-          echo "cypress-js.csv copied for archiving"
+          cd cypress/js
+          npm ci
+          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+            npm run test || true
+          done
+          cp timings.csv cypress-js.csv
 
   archive:
     name: Archive Results
@@ -146,9 +120,9 @@ jobs:
         with:
           name: test-results
           path: |
-            selenium-java.csv
-            selenium-java-pop.csv
-            selenium-js.csv
-            playwright-java.csv
-            playwright-js.csv
-            cypress-js.csv
+            selenium/java/selenium-java.csv
+            selenium/java_PageObjectPattern/selenium-java-pop.csv
+            selenium/js/selenium-js.csv
+            playwright/java/playwright-java.csv
+            playwright/js/playwright-js.csv
+            cypress/js/cypress-js.csv
