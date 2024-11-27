@@ -9,11 +9,11 @@ on:
       RUN_SELENIUM_JAVA:
         description: "Run Selenium Java tests"
         required: false
-        default: false
+        default: "true"
       RUN_SELENIUM_POP:
         description: "Run Selenium Page Object Pattern tests"
         required: false
-        default: false
+        default: "true"
       RUN_SELENIUM_JS:
         description: "Run Selenium JavaScript tests"
         required: false
@@ -43,7 +43,7 @@ jobs:
       - name: Set up Java and Maven
         uses: actions/setup-java@v3
         with:
-          java-version: '11'
+          java-version: '17'
           distribution: 'temurin'
 
       - name: Debug Parameters
