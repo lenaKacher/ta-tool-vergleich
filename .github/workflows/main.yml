@@ -41,8 +41,9 @@ jobs:
         run: which bash
 
       - name: Check Bash Availability
+        shell: cmd
         run: |
-          "C:\Users\okacher\AppData\Local\Programs\Git\bin\bash.exe" -version
+          "C:\Users\okacher\AppData\Local\Programs\Git\bin\bash.exe" --version
           
       - name: Set up Dev Container CLI
         uses: devcontainers/ci@v0.3
