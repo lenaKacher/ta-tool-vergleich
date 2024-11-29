@@ -54,6 +54,12 @@ jobs:
       
       # - name: Build Dev Container
       #   run: C:\Users\okacher\AppData\Roaming\npm\devcontainer.cmd build --workspace-folder .
+
+      - name: Check Docker Version
+        run: docker --version
+
+      - name: Add Git Bash to PATH
+        run: echo "PATH=C:\\Users\\okacher\\AppData\\Local\\Programs\\Git\\bin;$PATH" >> $GITHUB_ENV
         
       - name: Set up Dev Container CLI
         uses: devcontainers/ci@v0.3
