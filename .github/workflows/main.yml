@@ -45,6 +45,9 @@ jobs:
 
       - name: Install Dev Container CLI
         run: npm install -g @devcontainers/cli
+
+      - name: Add npm Global Path to PATH
+        run: echo "C:\Users\okacher\AppData\Roaming\npm;$env:PATH" >> $GITHUB_ENV
         
       - name: Build Dev Container
         run: devcontainer build --workspace-folder .
