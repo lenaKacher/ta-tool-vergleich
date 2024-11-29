@@ -97,62 +97,62 @@ jobs:
       - name: Clean up
         run: devcontainer down
         
-  playwright:
-    name: Playwright Tests
-    runs-on: self-hosted
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  # playwright:
+  #   name: Playwright Tests
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.15.1'
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '20.15.1'
 
-      - name: Run Playwright Java Tests
-        if: ${{ inputs.RUN_PLAYWRIGHT_JAVA == 'true' }}
-        run: |
-          cd playwright/java
-          mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install-deps"
-          mvn test-compile
-          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-            mvn clean test || true
-          done
-          cp timings.csv playwright-java.csv
+  #     - name: Run Playwright Java Tests
+  #       if: ${{ inputs.RUN_PLAYWRIGHT_JAVA == 'true' }}
+  #       run: |
+  #         cd playwright/java
+  #         mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="install-deps"
+  #         mvn test-compile
+  #         for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+  #           mvn clean test || true
+  #         done
+  #         cp timings.csv playwright-java.csv
 
-      - name: Run Playwright JavaScript Tests
-        if: ${{ inputs.RUN_PLAYWRIGHT_JS == 'true' }}
-        run: |
-          cd playwright/js
-          npm ci
-          npx playwright install
-          npx playwright install-deps
-          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-            npm run test || true
-          done
-          cp timings.csv playwright-js.csv
+  #     - name: Run Playwright JavaScript Tests
+  #       if: ${{ inputs.RUN_PLAYWRIGHT_JS == 'true' }}
+  #       run: |
+  #         cd playwright/js
+  #         npm ci
+  #         npx playwright install
+  #         npx playwright install-deps
+  #         for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+  #           npm run test || true
+  #         done
+  #         cp timings.csv playwright-js.csv
 
-  cypress:
-    name: Cypress Tests
-    runs-on: self-hosted
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+  # cypress:
+  #   name: Cypress Tests
+  #   runs-on: self-hosted
+  #   steps:
+  #     - name: Checkout code
+  #       uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
-          node-version: '20.15.1'
+  #     - name: Set up Node.js
+  #       uses: actions/setup-node@v3
+  #       with:
+  #         node-version: '20.15.1'
 
-      - name: Run Cypress Tests
-        if: ${{ inputs.RUN_CYPRESS_JS == 'true' }}
-        run: |
-          cd cypress/js
-          npm ci
-          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-            npm run test || true
-          done
-          cp timings.csv cypress-js.csv
+  #     - name: Run Cypress Tests
+  #       if: ${{ inputs.RUN_CYPRESS_JS == 'true' }}
+  #       run: |
+  #         cd cypress/js
+  #         npm ci
+  #         for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+  #           npm run test || true
+  #         done
+  #         cp timings.csv cypress-js.csv
 
   archive:
     name: Archive Results
