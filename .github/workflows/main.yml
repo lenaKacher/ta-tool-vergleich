@@ -48,7 +48,9 @@ jobs:
         
       - name: Check Bash Location
         shell: bash
-        run: which bash
+        run: |
+          "C:\\Users\\okacher\\AppData\\Local\\Programs\\Git\\bin\\bash.exe" -c "echo 'Hello from Git Bash!'"
+          which bash
 
       - name: Run with Git Bash
         shell: bash
