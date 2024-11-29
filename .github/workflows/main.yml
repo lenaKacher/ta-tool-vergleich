@@ -40,9 +40,10 @@ jobs:
       - name: Check Bash Location
         run: which bash
 
-      - name: Bash Version
-        run: bash --version
-
+      - name: Run with Git Bash
+        shell: bash
+        run: bash --version 
+    
       - name: Install Dev Container CLI
         run: npm install -g @devcontainers/cli
       
