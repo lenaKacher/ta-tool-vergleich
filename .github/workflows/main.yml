@@ -42,6 +42,10 @@ jobs:
         with:
           devcontainer-path: .devcontainer/devcontainer.json
 
+      - name: Check Bash Availability
+        run: |
+          bash --version
+
       - name: Start Dev Container
         run: |
           devcontainer up --workspace-folder .
