@@ -163,8 +163,8 @@ jobs:
     runs-on: self-hosted
     needs:
       - selenium
-      - playwright
-      - cypress
+      # - playwright
+      # - cypress
     steps:
       - name: Upload Artifacts
         uses: actions/upload-artifact@v3
@@ -174,6 +174,6 @@ jobs:
             selenium/java/selenium-java.csv
             selenium/java_PageObjectPattern/selenium-java-pop.csv
             selenium/js/selenium-js.csv
-            playwright/java/playwright-java.csv
-            playwright/js/playwright-js.csv
-            cypress/js/cypress-js.csv
+            # playwright/java/playwright-java.csv
+            # playwright/js/playwright-js.csv
+            # cypress/js/cypress-js.csv
