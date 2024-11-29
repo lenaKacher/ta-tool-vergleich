@@ -37,14 +37,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Check Bash Availability
+        run: |
+          bash --version
+          
       - name: Set up Dev Container CLI
         uses: devcontainers/ci@v0.3
         with:
           devcontainer-path: .devcontainer/devcontainer.json
-
-      - name: Check Bash Availability
-        run: |
-          bash --version
 
       - name: Start Dev Container
         run: |
