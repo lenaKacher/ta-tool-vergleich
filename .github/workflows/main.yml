@@ -33,6 +33,9 @@ jobs:
   selenium:
     name: Selenium Tests
     runs-on: self-hosted
+    env:
+      PATH: C:\Users\okacher\AppData\Local\Programs\Git\bin;$PATH
+      
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
