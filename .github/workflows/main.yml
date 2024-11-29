@@ -48,24 +48,17 @@ jobs:
         
       - name: Add Git Bash to PATH
         run: echo "PATH=C:\\Users\\okacher\\AppData\\Local\\Programs\\Git\\bin;$PATH" >> $GITHUB_ENV
-
-      # - name: Run Command with Updated PATH
-      #   run: |
-      #     bash -c "echo 'Running with Updated PATH'"
-
-      - name: Run with Git Bash
-        run: bash --version 
     
-      - name: Install Dev Container CLI
-        run: npm install -g @devcontainers/cli
+      # - name: Install Dev Container CLI
+      #   run: npm install -g @devcontainers/cli
       
-      - name: Build Dev Container
-        run: C:\Users\okacher\AppData\Roaming\npm\devcontainer.cmd build --workspace-folder .
+      # - name: Build Dev Container
+      #   run: C:\Users\okacher\AppData\Roaming\npm\devcontainer.cmd build --workspace-folder .
         
-      # - name: Set up Dev Container CLI
-      #   uses: devcontainers/ci@v0.3
-      #   with:
-      #     devcontainer-path: .devcontainer/devcontainer.json
+      - name: Set up Dev Container CLI
+        uses: devcontainers/ci@v0.3
+        with:
+          devcontainer-path: .devcontainer/devcontainer.json
 
       - name: Start Dev Container
         run: |
