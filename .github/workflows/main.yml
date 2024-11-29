@@ -51,7 +51,7 @@ jobs:
 
       - name: Run Command with Updated PATH
         run: |
-          bash -c "echo 'Running with Updated PATH'
+          bash -c "echo 'Running with Updated PATH'"
 
       - name: Run with Git Bash
         shell: bash
