@@ -42,11 +42,17 @@ jobs:
 
       - name: Ensure Git Bash is First in PATH
         run: echo "C:\\Users\\okacher\\AppData\\Local\\Programs\\Git\\bin:$PATH" >> $GITHUB_ENV
-          
-      - name: Set up Dev Container CLI
-        uses: devcontainers/ci@v0.3
-        with:
-          devcontainer-path: .devcontainer/devcontainer.json
+
+      - name: Install Dev Container CLI
+        run: npm install -g @devcontainers/cli
+        
+      - name: Build Dev Container
+        run: devcontainer build --workspace-folder .
+        
+      # - name: Set up Dev Container CLI
+      #   uses: devcontainers/ci@v0.3
+      #   with:
+      #     devcontainer-path: .devcontainer/devcontainer.json
 
       - name: Start Dev Container
         run: |
