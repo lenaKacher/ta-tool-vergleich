@@ -40,20 +40,14 @@ jobs:
       - name: Check Bash Location
         run: which bash
 
-      - name: Ensure Git Bash is First in PATH
-        run: echo "C:\\Users\\okacher\\AppData\\Local\\Programs\\Git\\bin:$PATH" >> $GITHUB_ENV
+      - name: Bash Version
+        run: bash --version
 
       - name: Install Dev Container CLI
         run: npm install -g @devcontainers/cli
-
-      - name: Add npm Global Path to PATH
-        run: echo "C:\Users\okacher\AppData\Roaming\npm;$env:PATH" >> $GITHUB_ENV
-
-      - name: Debug PATH
-        run: echo $env:PATH
-        
+      
       - name: Build Dev Container
-        run: devcontainer build --workspace-folder .
+        run: C:\Users\okacher\AppData\Roaming\npm\devcontainer.cmd build --workspace-folder .
         
       # - name: Set up Dev Container CLI
       #   uses: devcontainers/ci@v0.3
