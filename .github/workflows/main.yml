@@ -40,10 +40,8 @@ jobs:
       - name: Check Bash Location
         run: which bash
 
-      - name: Check Bash Availability
-        shell: cmd
-        run: |
-          "C:\Users\okacher\AppData\Local\Programs\Git\bin\bash.exe" --version
+      - name: Ensure Git Bash is First in PATH
+        run: echo "C:\\Users\\okacher\\AppData\\Local\\Programs\\Git\\bin:$PATH" >> $GITHUB_ENV
           
       - name: Set up Dev Container CLI
         uses: devcontainers/ci@v0.3
