@@ -41,6 +41,7 @@ jobs:
         uses: actions/checkout@v3
         
       - name: Check Bash Location
+        shell: bash
         run: which bash
 
       - name: Run with Git Bash
