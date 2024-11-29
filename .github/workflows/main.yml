@@ -48,6 +48,9 @@ jobs:
 
       - name: Add npm Global Path to PATH
         run: echo "C:\Users\okacher\AppData\Roaming\npm;$env:PATH" >> $GITHUB_ENV
+
+      - name: Debug PATH
+        run: echo $env:PATH
         
       - name: Build Dev Container
         run: devcontainer build --workspace-folder .
