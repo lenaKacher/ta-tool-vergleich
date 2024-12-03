@@ -36,9 +36,7 @@ jobs:
         run: echo $env:PATH
         
       - name: Install Dev Containers CLI
-        run: |
-        #  Remove-Item -Path "C:\Users\okacher-adm\AppData\Roaming\npm\node_modules\@devcontainers\cli" -Recurse -Force
-          npm install -g @devcontainers/cli@0.3
+        run: npm install -g @devcontainers/cli@0.3
 
       - name: Check devcontainer CLI
         run: devcontainer --version
