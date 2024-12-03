@@ -16,31 +16,7 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
-      
-      - name: Convert line endings on Windows
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: |
-          Get-ChildItem -Path . -Recurse -File | ForEach-Object {
-          (Get-Content $_.FullName) -replace "`r", "" | Set-Content -NoNewline $_.FullName
-          }
-          
-      - name: Validate Dev Container JSON on Windows
-        if: runner.os == 'Windows'
-        shell: powershell
-        run: |
-          Get-Content .devcontainer/devcontainer.json
-          try {
-          jq . .devcontainer/devcontainer.json
-          } catch {
-          Write-Host "Invalid JSON format!"
-          }
-
-      - name: Fix line endings
-        shell: bash
-        run: |
-          dos2unix .devcontainer/devcontainer.json || true
-          
+             
       - name: Install Dev Containers CLI
         run: npm install -g @devcontainers/cli@0.3
 
@@ -63,14 +39,11 @@ jobs:
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
         run: |
-          devcontainer exec --workspace-folder . -- bash -c "
-            cd selenium/java
-            mvn test-compile
-            for i in {1..5}; do
-              mvn clean test || true
-            done
-            cp timings.csv selenium-java.csv
-            "
+          devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && mvn test-compile"
+          for i in $(seq 1 5); do
+          devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && mvn clean test || true"
+          done
+
       - name: Archive Selenium Test Results
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
         uses: actions/upload-artifact@v3
