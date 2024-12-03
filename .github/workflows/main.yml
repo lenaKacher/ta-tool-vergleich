@@ -23,18 +23,12 @@ jobs:
 
       - name: Check Bash Location
         run: Get-Command bash
-        
-      - name: Add Git Bash to PATH
-        run: echo "PATH=C:\\Users\\okacher\\AppData\\Local\\Programs\\Git\\bin;$PATH" >> $GITHUB_ENV
-    
-      - name: Add Docker to PATH
-        run: echo "PATH=C:\Program Files\Docker\Docker\resources\bin;$PATH" >> $GITHUB_ENV
-        
+            
       - name: Check Docker Version
         run: docker --version
                 
       - name: Add npm to PATH
-        run: echo "PATH=C:\Users\okacher\AppData\Roaming\npm;$PATH" >> $GITHUB_ENV
+        run: echo "PATH=C:\\Users\\okacher\\AppData\\Roaming\\npm;$PATH" >> $GITHUB_ENV
 
       - name: Debug PATH
         run: echo $env:PATH
