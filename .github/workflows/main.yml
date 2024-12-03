@@ -37,7 +37,7 @@ jobs:
         
       - name: Install Dev Containers CLI
         run: |
-          rmdir /s /q "C:\Users\okacher-adm\AppData\Roaming\npm\node_modules\@devcontainers\cli"
+          Remove-Item -Path "C:\Users\okacher-adm\AppData\Roaming\npm\node_modules\@devcontainers\cli" -Recurse -Force
           npm install -g @devcontainers/cli@0.3
 
       - name: Check devcontainer CLI
