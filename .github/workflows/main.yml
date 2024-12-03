@@ -24,7 +24,16 @@ jobs:
           Get-ChildItem -Path . -Recurse -File | ForEach-Object {
           (Get-Content $_.FullName) -replace "`r", "" | Set-Content -NoNewline $_.FullName
           }
+      - name: Validate Dev Container JSON
+        run: |
+          cat .devcontainer/devcontainer.json
+          jq . .devcontainer/devcontainer.json || echo "Invalid JSON format!"
 
+      - name: Fix line endings
+        shell: bash
+        run: |
+          dos2unix .devcontainer/devcontainer.json || true
+          
       - name: Install Dev Containers CLI
         run: npm install -g @devcontainers/cli@0.3
 
