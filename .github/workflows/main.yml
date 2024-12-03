@@ -17,9 +17,14 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       
-      - name: Convert line endings to LF
+      - name: Convert line endings
         run: |
-          find . -type f -exec dos2unix {} +
+          if [ "$(uname -s)" = "Linux" ]; then
+            find . -type f -exec dos2unix {} +
+          else
+            pwsh -Command "Get-ChildItem -Path . -Recurse -File | ForEach-Object { (Get-Content $_.FullName) -replace '`r', '' | Set-Content -NoNewline $_.FullName }"
+          fi
+        shell: bash
 
       - name: Install Dev Containers CLI
         run: npm install -g @devcontainers/cli@0.3
