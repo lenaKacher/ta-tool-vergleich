@@ -17,23 +17,6 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v3
-
-      - name: Debug PATH
-        run: echo $env:PATH
-
-      - name: Check Bash Location
-        run: Get-Command bash
-            
-      - name: Check Docker Version
-        run: docker --version
-                
-      - name: Force Update PATH
-        run: |
-            echo "PATH=$env:PATH" >> $GITHUB_ENV
-            echo $env:PATH
-            
-      - name: Debug PATH
-        run: echo $env:PATH
         
       - name: Install Dev Containers CLI
         run: npm install -g @devcontainers/cli@0.3
@@ -61,10 +44,11 @@ jobs:
             cd selenium/java
             mvn test-compile
             NUMBER_OF_RUNS=5
-            for i in \$(seq 1 \$NUMBER_OF_RUNS); do
+            for i in \'$(seq 1 \'$NUMBER_OF_RUNS\'); do
               mvn clean test || true
             done
             cp timings.csv selenium-java.csv
+            "
 
       # - name: Run Selenium Java - Page Objects Tests
       #   if: ${{ inputs.RUN_SELENIUM_POP == 'true' }}
