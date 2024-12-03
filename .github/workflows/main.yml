@@ -102,8 +102,8 @@ jobs:
       #     done
       #     cp timings.csv selenium-js.csv
           
-      - name: Clean up
-        run: devcontainer down
+      # - name: Clean up
+      #   run: devcontainer down
         
   # playwright:
   #   name: Playwright Tests
@@ -162,22 +162,22 @@ jobs:
   #         done
   #         cp timings.csv cypress-js.csv
 
-  archive:
-    name: Archive Results
-    runs-on: self-hosted
-    needs:
-      - selenium
-      # - playwright
-      # - cypress
-    steps:
-      - name: Upload Artifacts
-        uses: actions/upload-artifact@v3
-        with:
-          name: test-results
-          path: |
-            selenium/java/selenium-java.csv
-            selenium/java_PageObjectPattern/selenium-java-pop.csv
-            selenium/js/selenium-js.csv
-            # playwright/java/playwright-java.csv
-            # playwright/js/playwright-js.csv
-            # cypress/js/cypress-js.csv
+  # archive:
+  #   name: Archive Results
+  #   runs-on: self-hosted
+  #   needs:
+  #     - selenium
+  #     # - playwright
+  #     # - cypress
+  #   steps:
+  #     - name: Upload Artifacts
+  #       uses: actions/upload-artifact@v3
+  #       with:
+  #         name: test-results
+  #         path: |
+  #           selenium/java/selenium-java.csv
+  #           selenium/java_PageObjectPattern/selenium-java-pop.csv
+  #           selenium/js/selenium-js.csv
+  #           # playwright/java/playwright-java.csv
+  #           # playwright/js/playwright-js.csv
+  #           # cypress/js/cypress-js.csv
