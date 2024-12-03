@@ -16,25 +16,50 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+
+      - name: Set up Dev Container
+        uses: devcontainers/ci@v0.3
+        with:
+          devcontainer-path: .devcontainer/devcontainer.json
+          workspace-folder: .
+
+      - name: Run Selenium Java Tests
+        if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
+        run: |
+          devcontainer exec --workspace-folder . -- bash -c "
+            cd selenium/java
+            mvn test-compile
+            for i in \$(seq 1 5); do
+              mvn clean test || true
+            done
+            cp timings.csv selenium-java.csv
+          "
+
+      - name: Archive Selenium Test Results
+        if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium-java-results
+          path: selenium/java/selenium-java.csv
         
-      - name: Install Dev Containers CLI
-        run: npm install -g @devcontainers/cli@0.3
+      # - name: Install Dev Containers CLI
+      #   run: npm install -g @devcontainers/cli@0.3
 
-      - name: Check devcontainer CLI
-        run: devcontainer --version
+      # - name: Check devcontainer CLI
+      #   run: devcontainer --version
 
-      - name: Start Dev Container
-        run: |
-          devcontainer up --workspace-folder .
-          devcontainer exec --workspace-folder . -- docker --version
+      # - name: Start Dev Container
+      #   run: |
+      #     devcontainer up --workspace-folder .
+      #     devcontainer exec --workspace-folder . -- docker --version
 
-      - name: Verify Docker Daemon
-        run: |
-          devcontainer exec --workspace-folder . -- docker info
+      # - name: Verify Docker Daemon
+      #   run: |
+      #     devcontainer exec --workspace-folder . -- docker info
 
-      - name: Debug Parameters
-        run: |
-          echo "RUN_SELENIUM_JAVA=${{ inputs.RUN_SELENIUM_JAVA }}"
+      # - name: Debug Parameters
+      #   run: |
+      #     echo "RUN_SELENIUM_JAVA=${{ inputs.RUN_SELENIUM_JAVA }}"
 
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
@@ -47,28 +72,7 @@ jobs:
               mvn clean test || true
             done
             cp timings.csv selenium-java.csv
-            "
-
-      - name: Run Selenium Java - Page Objects Tests
-        if: ${{ inputs.RUN_SELENIUM_POP == 'true' }}
-        run: |
-          cd selenium/java_PageObjectPattern
-          mvn test-compile
-          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-            mvn clean test || true
-          done
-          cp timings.csv selenium-java-pop.csv
-
-      - name: Run Selenium JavaScript Tests
-        if: ${{ inputs.RUN_SELENIUM_JS == 'true' }}
-        run: |
-          cd selenium/js
-          npm ci
-          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-            npm test || true
-          done
-          cp timings.csv selenium-js.csv
-          
+            "   
       - name: Clean up
         run: devcontainer down
         
