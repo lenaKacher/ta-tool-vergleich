@@ -7,7 +7,28 @@ on:
         description: "Run Selenium Java tests"
         required: false
         default: "true"
+      RUN_SELENIUM_POP:
+        description: "Run Selenium Page Object Pattern tests"
+        required: false
+        default: "false"
+      RUN_SELENIUM_JS:
+        description: "Run Selenium JavaScript tests"
+        required: false
+        default: false
+      RUN_PLAYWRIGHT_JAVA:
+        description: "Run Playwright Java tests"
+        required: false
+        default: false
+      RUN_PLAYWRIGHT_JS:
+        description: "Run Playwright JavaScript tests"
+        required: false
+        default: false
+      RUN_CYPRESS_JS:
+        description: "Run Cypress JavaScript tests"
+        required: false
+        default: false
   pull_request:
+
 jobs:
   selenium:
     name: Selenium Tests
@@ -28,6 +49,11 @@ jobs:
       - name: Debug Parameters
         run: |
           echo "RUN_SELENIUM_JAVA=${{ inputs.RUN_SELENIUM_JAVA }}"
+          echo "RUN_SELENIUM_POP=${{ inputs.RUN_SELENIUM_POP }}"
+          echo "RUN_SELENIUM_JS=${{ inputs.RUN_SELENIUM_JS }}"
+          echo "RUN_PLAYWRIGHT_JAVA=${{ inputs.RUN_PLAYWRIGHT_JAVA }}"
+          echo "RUN_PLAYWRIGHT_JS=${{ inputs.RUN_PLAYWRIGHT_JS }}"
+          echo "RUN_CYPRESS_JS=${{ inputs.RUN_CYPRESS_JS }}"
 
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
@@ -37,6 +63,7 @@ jobs:
           for i in {1..5}; do
           devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && mvn clean test || true"
           done
+          devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && cp timings.csv selenium-java.csv"
 
       - name: Archive Selenium Test Results
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
@@ -44,6 +71,43 @@ jobs:
         with:
           name: selenium-java-results
           path: selenium/java/selenium-java.csv
+          
+      - name: Run Selenium Java - Page Objects Tests
+        if: ${{ inputs.RUN_SELENIUM_POP == 'true' }}
+        shell: bash
+        run: |
+          devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && mvn test-compile"
+          for i in {1..5}; do
+          devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && mvn clean test || true"
+          done
+          devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && cp timings.csv selenium-java-pop.csv"
+
+      - name: Archive POP Selenium Test Results
+        if: ${{ inputs.RUN_SELENIUM_POP == 'true' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium-java-pop.csv
+          path: selenium/java/selenium-java-pop.csv
+          
+      - name: Run Selenium JavaScript Tests
+        if: ${{ inputs.RUN_SELENIUM_JS == 'true' }}
+        shell: bash
+        run: |
+          devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && mvn test-compile"
+          for i in {1..5}; do
+          devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && mvn clean test || true"
+          done
+          devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && cp timings.csv selenium-java-pop.csv"
+
+      - name: Archive POP Selenium Test Results
+        if: ${{ inputs.RUN_SELENIUM_POP == 'true' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium-js.csv
+          path: selenium/java/selenium-js.csv
+          
+      - name: Clean up
+        run: devcontainer down
         
   # playwright:
   #   name: Playwright Tests
