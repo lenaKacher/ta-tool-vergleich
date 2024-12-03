@@ -27,9 +27,6 @@ jobs:
       - name: Check Docker Version
         run: docker --version
                 
-      - name: Add npm to PATH
-        run: echo "PATH=C:\\Users\\okacher\\AppData\\Roaming\\npm;$PATH" >> $GITHUB_ENV
-
       - name: Force Update PATH
         run: |
             echo "PATH=$env:PATH" >> $GITHUB_ENV
@@ -39,7 +36,9 @@ jobs:
         run: echo $env:PATH
         
       - name: Install Dev Containers CLI
-        run: npm install -g @devcontainers/cli@0.3
+        run: |
+          rmdir /s /q "C:\Users\okacher-adm\AppData\Roaming\npm\node_modules\@devcontainers\cli"
+          npm install -g @devcontainers/cli@0.3
 
       - name: Check devcontainer CLI
         run: devcontainer --version
