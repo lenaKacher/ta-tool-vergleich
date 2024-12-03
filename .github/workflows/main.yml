@@ -16,6 +16,10 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v3
+      
+      - name: Convert line endings to LF
+        run: |
+          find . -type f -exec dos2unix {} +
 
       - name: Install Dev Containers CLI
         run: npm install -g @devcontainers/cli@0.3
