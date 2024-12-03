@@ -38,11 +38,12 @@ jobs:
 
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
+        shell: pwsh
         run: |
-          devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && mvn test-compile"
-          for i in $(seq 1 5); do
-          devcontainer exec --workspace-folder . -- bash -c "cd selenium/java && mvn clean test || true"
-          done
+          devcontainer exec --workspace-folder . -- powershell -Command "cd selenium/java; mvn test-compile"
+          for ($i = 1; $i -le 5; $i++) {
+            devcontainer exec --workspace-folder . -- powershell -Command "cd selenium/java; mvn clean test || $true"
+          }
 
       - name: Archive Selenium Test Results
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
