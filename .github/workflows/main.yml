@@ -63,7 +63,21 @@ jobs:
           for i in $(seq 1 ${inputs.NUMBER_OF_RUNS}); do
             npm run test || true
           done
-          cp timings.csv ../playwright-js.csv
+      - name: Copy timings.csv to playwright-java.csv
+        run: |
+          if [ -f timings.csv ]; then
+          cp timings.csv playwright-java.csv
+          else
+          echo "timings.csv not found. Skipping copy."
+          fi
+
+      - name: Upload playwright-java.csv as artifact
+        if: inputs.RUN_PLAYWRIGHT_JAVA
+        uses: actions/upload-artifact@v3
+        with:
+          name: playwright-java
+          path: playwright-java.csv
+          if-no-files-found: ignore
 
       - name: Run Playwright JavaScript
         if: inputs.RUN_PLAYWRIGHT_JS
