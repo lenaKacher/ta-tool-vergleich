@@ -42,11 +42,11 @@ jobs:
           devcontainer exec --workspace-folder . -- bash -c "
             cd selenium/java
             mvn test-compile
-            for i in \$(seq 1 5); do
+            for i in {1..5}; do
               mvn clean test || true
             done
             cp timings.csv selenium-java.csv
-          "
+            "
       - name: Archive Selenium Test Results
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
         uses: actions/upload-artifact@v3
