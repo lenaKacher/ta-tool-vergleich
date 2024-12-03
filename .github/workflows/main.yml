@@ -17,15 +17,9 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
       
-      - name: Convert line endings on Linux
-        if: runner.os == 'Linux'
-        shell: bash
-        run: |
-          find . -type f -exec dos2unix {} +
-
       - name: Convert line endings on Windows
         if: runner.os == 'Windows'
-        shell: pwsh
+        shell: powershell
         run: |
           Get-ChildItem -Path . -Recurse -File | ForEach-Object {
           (Get-Content $_.FullName) -replace "`r", "" | Set-Content -NoNewline $_.FullName
