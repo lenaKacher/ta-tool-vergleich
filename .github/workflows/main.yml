@@ -30,6 +30,11 @@ jobs:
       - name: Add npm to PATH
         run: echo "PATH=C:\\Users\\okacher\\AppData\\Roaming\\npm;$PATH" >> $GITHUB_ENV
 
+      - name: Force Update PATH
+        run: |
+            echo "PATH=$env:PATH" >> $GITHUB_ENV
+            echo $env:PATH
+            
       - name: Debug PATH
         run: echo $env:PATH
         
