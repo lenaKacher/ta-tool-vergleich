@@ -24,13 +24,13 @@ jobs:
           echo "DOCKER_HOME=/var/run/docker.sock" >> $GITHUB_ENV
 
       - name: Pull Maven Docker Image
-        run: docker pull maven:${{ env.MVN_VERSION }}
+        run: docker pull maven:latest
 
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
         run: |
           docker run --rm -v ${{ env.DOCKER_HOME }}:/var/run/docker.sock -u 0:0 --privileged --network host \
-            -v $(pwd):/workspace -w /workspace/selenium/java maven:${{ env.MVN_VERSION }} \
+            -v $(pwd):/workspace -w /workspace/selenium/java maven:latest \
             bash -c "
               mvn test-compile &&
               for i in \$(seq 1 ${{ env.NUMBER_OF_RUNS }}); do
