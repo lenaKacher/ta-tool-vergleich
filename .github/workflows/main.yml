@@ -8,47 +8,79 @@ on:
         required: false
         default: "true"
   pull_request:
-
 jobs:
   selenium:
     name: Selenium Tests
-    runs-on: self-hosted
-      
+    runs-on: self-hosted  
+    
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v3
         
-      - name: Install Dev Containers CLI
-        run: npm install -g @devcontainers/cli@0.3
-
-      - name: Check devcontainer CLI
-        run: devcontainer --version
-
-      - name: Start Dev Container
+      - name: Set environment variables
         run: |
-          devcontainer up --workspace-folder .
-          devcontainer exec --workspace-folder . -- docker --version
+          echo "MVN_VERSION=3.8.6" >> $GITHUB_ENV
+          echo "NUMBER_OF_RUNS=5" >> $GITHUB_ENV
+          echo "DOCKER_HOME=/var/run/docker.sock" >> $GITHUB_ENV
 
-      - name: Verify Docker Daemon
-        run: |
-          devcontainer exec --workspace-folder . -- docker info
-
-      - name: Debug Parameters
-        run: |
-          echo "RUN_SELENIUM_JAVA=${{ inputs.RUN_SELENIUM_JAVA }}"
+      - name: Pull Maven Docker Image
+        run: docker pull maven:${{ env.MVN_VERSION }}
 
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
         run: |
-          devcontainer exec --workspace-folder . -- bash -c "
-            cd selenium/java
-            mvn test-compile
-            NUMBER_OF_RUNS=5
-            for i in \'$(seq 1 \'$NUMBER_OF_RUNS\'); do
-              mvn clean test || true
-            done
-            cp timings.csv selenium-java.csv
+          docker run --rm -v ${{ env.DOCKER_HOME }}:/var/run/docker.sock -u 0:0 --privileged --network host \
+            -v $(pwd):/workspace -w /workspace/selenium/java maven:${{ env.MVN_VERSION }} \
+            bash -c "
+              mvn test-compile &&
+              for i in \$(seq 1 ${{ env.NUMBER_OF_RUNS }}); do
+                mvn clean test || true
+              done &&
+              cp timings.csv selenium-java.csv
             "
+
+      - name: Archive Selenium Test Results
+        if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium-java-results
+          path: selenium/java/selenium-java.csv
+      
+#     steps:
+#       - name: Checkout code
+#         uses: actions/checkout@v3
+        
+#       - name: Install Dev Containers CLI
+#         run: npm install -g @devcontainers/cli@0.3
+
+#       - name: Check devcontainer CLI
+#         run: devcontainer --version
+
+#       - name: Start Dev Container
+#         run: |
+#           devcontainer up --workspace-folder .
+#           devcontainer exec --workspace-folder . -- docker --version
+
+#       - name: Verify Docker Daemon
+#         run: |
+#           devcontainer exec --workspace-folder . -- docker info
+
+#       - name: Debug Parameters
+#         run: |
+#           echo "RUN_SELENIUM_JAVA=${{ inputs.RUN_SELENIUM_JAVA }}"
+
+#       - name: Run Selenium Java Tests
+#         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
+#         run: |
+#           devcontainer exec --workspace-folder . -- bash -c "
+#             cd selenium/java
+#             mvn test-compile
+#             NUMBER_OF_RUNS=5
+#             for i in \'$(seq 1 \'$NUMBER_OF_RUNS\'); do
+#               mvn clean test || true
+#             done
+#             cp timings.csv selenium-java.csv
+#             "
 
       # - name: Run Selenium Java - Page Objects Tests
       #   if: ${{ inputs.RUN_SELENIUM_POP == 'true' }}
