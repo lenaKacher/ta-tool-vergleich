@@ -44,16 +44,14 @@ jobs:
       - name: Run Playwright Java
         if: inputs.RUN_PLAYWRIGHT_JAVA
         run: |
-          docker run --rm -v /var/run/docker.sock:/var/run/docker.sock --privileged --network host maven:3.9.8 bash -c "
-          cd playwright/java &&
-          mvn exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args='install-deps' &&
-          mvn test-compile &&
+          cd playwright/js
+          npm ci
+          npx playwright install
+          npx playwright install-deps
           for i in $(seq 1 ${inputs.NUMBER_OF_RUNS}); do
-            mvn clean test || true
-          done &&
-          cp timings.csv playwright-java.csv &&
-          exit 0"
-          mv playwright/java/playwright-java.csv .
+            npm run test || true
+          done
+          cp timings.csv ../playwright-js.csv
 
       - name: Run Playwright JavaScript
         if: inputs.RUN_PLAYWRIGHT_JS
