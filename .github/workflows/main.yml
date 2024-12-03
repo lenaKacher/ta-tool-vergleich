@@ -7,34 +7,12 @@ on:
         description: "Run Selenium Java tests"
         required: false
         default: "true"
-      RUN_SELENIUM_POP:
-        description: "Run Selenium Page Object Pattern tests"
-        required: false
-        default: "false"
-      RUN_SELENIUM_JS:
-        description: "Run Selenium JavaScript tests"
-        required: false
-        default: false
-      RUN_PLAYWRIGHT_JAVA:
-        description: "Run Playwright Java tests"
-        required: false
-        default: false
-      RUN_PLAYWRIGHT_JS:
-        description: "Run Playwright JavaScript tests"
-        required: false
-        default: false
-      RUN_CYPRESS_JS:
-        description: "Run Cypress JavaScript tests"
-        required: false
-        default: false
   pull_request:
 
 jobs:
   selenium:
     name: Selenium Tests
     runs-on: self-hosted
-    # env:
-    #   PATH: C:\Users\okacher\AppData\Local\Programs\Git\bin;$PATH
       
     steps:
       - name: Checkout code
@@ -49,25 +27,23 @@ jobs:
       - name: Add Git Bash to PATH
         run: echo "PATH=C:\\Users\\okacher\\AppData\\Local\\Programs\\Git\\bin;$PATH" >> $GITHUB_ENV
     
-      # - name: Install Dev Container CLI
-      #   run: npm install -g @devcontainers/cli
-      
-      # - name: Build Dev Container
-      #   run: C:\Users\okacher\AppData\Roaming\npm\devcontainer.cmd build --workspace-folder .
-
-      - name: Add Git Bash to PATH
-        run: echo "PATH=C:\\Users\\okacher\\AppData\\Local\\Programs\\Git\\bin;$PATH" >> $GITHUB_ENV
-
       - name: Add Docker to PATH
         run: echo "PATH=C:\Program Files\Docker\Docker\resources\bin;$PATH" >> $GITHUB_ENV
-
+        
       - name: Check Docker Version
         run: docker --version
+                
+      - name: Add npm to PATH
+        run: echo "PATH=C:\Users\okacher\AppData\Roaming\npm;$PATH" >> $GITHUB_ENV
+
+      - name: Debug PATH
+        run: echo $env:PATH
         
-      - name: Set up Dev Container CLI
-        uses: devcontainers/ci@v0.3
-        with:
-          devcontainer-path: .devcontainer/devcontainer.json
+      - name: Check devcontainer CLI
+        run: devcontainer --version
+        
+      - name: Install Dev Containers CLI
+        run: npm install -g @devcontainers/cli@0.3
 
       - name: Start Dev Container
         run: |
@@ -81,11 +57,6 @@ jobs:
       - name: Debug Parameters
         run: |
           echo "RUN_SELENIUM_JAVA=${{ inputs.RUN_SELENIUM_JAVA }}"
-          echo "RUN_SELENIUM_POP=${{ inputs.RUN_SELENIUM_POP }}"
-          echo "RUN_SELENIUM_JS=${{ inputs.RUN_SELENIUM_JS }}"
-          echo "RUN_PLAYWRIGHT_JAVA=${{ inputs.RUN_PLAYWRIGHT_JAVA }}"
-          echo "RUN_PLAYWRIGHT_JS=${{ inputs.RUN_PLAYWRIGHT_JS }}"
-          echo "RUN_CYPRESS_JS=${{ inputs.RUN_CYPRESS_JS }}"
 
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
@@ -98,28 +69,26 @@ jobs:
               mvn clean test || true
             done
             cp timings.csv selenium-java.csv
-          "
-          cp timings.csv selenium-java.csv
 
-      - name: Run Selenium Java - Page Objects Tests
-        if: ${{ inputs.RUN_SELENIUM_POP == 'true' }}
-        run: |
-          cd selenium/java_PageObjectPattern
-          mvn test-compile
-          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-            mvn clean test || true
-          done
-          cp timings.csv selenium-java-pop.csv
+      # - name: Run Selenium Java - Page Objects Tests
+      #   if: ${{ inputs.RUN_SELENIUM_POP == 'true' }}
+      #   run: |
+      #     cd selenium/java_PageObjectPattern
+      #     mvn test-compile
+      #     for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+      #       mvn clean test || true
+      #     done
+      #     cp timings.csv selenium-java-pop.csv
 
-      - name: Run Selenium JavaScript Tests
-        if: ${{ inputs.RUN_SELENIUM_JS == 'true' }}
-        run: |
-          cd selenium/js
-          npm ci
-          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-            npm test || true
-          done
-          cp timings.csv selenium-js.csv
+      # - name: Run Selenium JavaScript Tests
+      #   if: ${{ inputs.RUN_SELENIUM_JS == 'true' }}
+      #   run: |
+      #     cd selenium/js
+      #     npm ci
+      #     for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+      #       npm test || true
+      #     done
+      #     cp timings.csv selenium-js.csv
           
       - name: Clean up
         run: devcontainer down
