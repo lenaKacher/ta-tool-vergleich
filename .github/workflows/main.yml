@@ -39,11 +39,11 @@ jobs:
       - name: Debug PATH
         run: echo $env:PATH
         
-      - name: Check devcontainer CLI
-        run: devcontainer --version
-        
       - name: Install Dev Containers CLI
         run: npm install -g @devcontainers/cli@0.3
+
+      - name: Check devcontainer CLI
+        run: devcontainer --version
 
       - name: Start Dev Container
         run: |
