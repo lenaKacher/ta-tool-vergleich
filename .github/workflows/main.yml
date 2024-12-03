@@ -17,11 +17,24 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Set up Dev Container
-        uses: devcontainers/ci@v0.3
-        with:
-          devcontainer-path: .devcontainer/devcontainer.json
-          workspace-folder: .
+      - name: Install Dev Containers CLI
+        run: npm install -g @devcontainers/cli@0.3
+
+      - name: Check devcontainer CLI
+        run: devcontainer --version
+
+      - name: Start Dev Container
+        run: |
+          devcontainer up --workspace-folder .
+          devcontainer exec --workspace-folder . -- docker --version
+
+      - name: Verify Docker Daemon
+        run: |
+          devcontainer exec --workspace-folder . -- docker info
+
+      - name: Debug Parameters
+        run: |
+          echo "RUN_SELENIUM_JAVA=${{ inputs.RUN_SELENIUM_JAVA }}"
 
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
@@ -34,47 +47,12 @@ jobs:
             done
             cp timings.csv selenium-java.csv
           "
-
       - name: Archive Selenium Test Results
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
         uses: actions/upload-artifact@v3
         with:
           name: selenium-java-results
           path: selenium/java/selenium-java.csv
-        
-      # - name: Install Dev Containers CLI
-      #   run: npm install -g @devcontainers/cli@0.3
-
-      # - name: Check devcontainer CLI
-      #   run: devcontainer --version
-
-      # - name: Start Dev Container
-      #   run: |
-      #     devcontainer up --workspace-folder .
-      #     devcontainer exec --workspace-folder . -- docker --version
-
-      # - name: Verify Docker Daemon
-      #   run: |
-      #     devcontainer exec --workspace-folder . -- docker info
-
-      # - name: Debug Parameters
-      #   run: |
-      #     echo "RUN_SELENIUM_JAVA=${{ inputs.RUN_SELENIUM_JAVA }}"
-
-      - name: Run Selenium Java Tests
-        if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
-        run: |
-          devcontainer exec --workspace-folder . -- bash -c "
-            cd selenium/java
-            mvn test-compile
-            NUMBER_OF_RUNS=5
-            for i in \'$(seq 1 \'$NUMBER_OF_RUNS\'); do
-              mvn clean test || true
-            done
-            cp timings.csv selenium-java.csv
-            "   
-      - name: Clean up
-        run: devcontainer down
         
   # playwright:
   #   name: Playwright Tests
