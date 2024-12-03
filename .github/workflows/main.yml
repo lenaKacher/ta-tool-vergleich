@@ -20,17 +20,10 @@ jobs:
       - name: Install Dev Containers CLI
         run: npm install -g @devcontainers/cli@0.3
 
-      - name: Check devcontainer CLI
-        run: devcontainer --version
-
       - name: Start Dev Container
         run: |
           devcontainer up --workspace-folder .
           devcontainer exec --workspace-folder . -- docker --version
-
-      - name: Verify Docker Daemon
-        run: |
-          devcontainer exec --workspace-folder . -- docker info
 
       - name: Debug Parameters
         run: |
@@ -38,7 +31,7 @@ jobs:
 
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
-        shell: pwsh
+        shell: powershell
         run: |
           devcontainer exec --workspace-folder . -- powershell -Command "cd selenium/java; mvn test-compile"
           for ($i = 1; $i -le 5; $i++) {
