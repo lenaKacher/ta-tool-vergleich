@@ -31,7 +31,6 @@ jobs:
 
       - name: Run Selenium Java Tests
         if: ${{ inputs.RUN_SELENIUM_JAVA == 'true' }}
-        shell: powershell
         run: |
           devcontainer exec --workspace-folder . -- powershell -Command "cd selenium/java; mvn test-compile"
           for ($i = 1; $i -le 5; $i++) {
