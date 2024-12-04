@@ -37,6 +37,7 @@ jobs:
           - /var/run/docker.sock:/var/run/docker.sock:ro
     container:
       image: ubuntu:latest
+    
     steps:
       - name: Install system dependencies (if needed)
         run: |
@@ -45,11 +46,6 @@ jobs:
           apt-get install -y nodejs
         shell: bash
 
-      - name: Verify Node.js and npm installation
-        run: |
-          node -v
-          npm -v
-        shell: bash
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -61,6 +57,7 @@ jobs:
           npx playwright install
           npx playwright install-deps
           npm run test
+          
       - name: Copy timings.csv to playwright-java.csv
         run: |
           if [ -f timings.csv ]; then
