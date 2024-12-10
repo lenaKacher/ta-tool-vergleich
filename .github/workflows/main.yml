@@ -56,7 +56,7 @@ jobs:
           npm ci
           npx playwright install
           npx playwright install-deps
-          for i in $(seq 1 ${{ inputs.numberOfRuns }}); do
+          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
               npm run test || true
           done &&          
           cp timings.csv playwright-java.csv
