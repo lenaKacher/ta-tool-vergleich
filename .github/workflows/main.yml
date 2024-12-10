@@ -95,10 +95,7 @@ jobs:
 
       - name: Install Maven
         run: |
-          MAVEN_VERSION=3.8.8
-          curl -fsSL https://downloads.apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz -o maven.tar.gz
-          tar -xzf maven.tar.gz -C /opt/
-          ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
+          $ docker run -it --rm --name my-maven-project -v "$(pwd)":/usr/src/mymaven -w /usr/src/mymaven maven:3.3-jdk-8 mvn clean install
 
       - name: Verify Maven installation
         run: mvn --version
