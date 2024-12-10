@@ -57,18 +57,18 @@ jobs:
           for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
               npm run test || true
           done           
-          cp timings.csv playwright-java.csv
+          cp timings.csv playwright-js.csv
 
-      - name: Debug timings.csv and playwright-java.csv
+      - name: Debug timings.csv and playwright-js.csv
         run: |
           cd playwright/js
           ls -la
    
-      - name: Copy timings.csv to playwright-java.csv
+      - name: Copy timings.csv to playwright-js.csv
         uses: actions/upload-artifact@v4
         with:
           name: playwright-java.csv
-          path: playwright/js/playwright-java.csv
+          path: playwright/js/playwright-js.csv
           if-no-files-found: ignore
           
   playwright-java:
@@ -117,7 +117,7 @@ jobs:
           for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
              mvn clean test || true
           done 
-          cp timings.csv playwright-java.csv
+          cp timings.csv playwright-js.csv
 
       - name: Debug timings.csv and playwright-java.csv
         run: |
