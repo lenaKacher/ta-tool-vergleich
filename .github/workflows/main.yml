@@ -183,6 +183,9 @@ jobs:
         run: |
           DOCKER_NETWORK_GATEWAY=$(docker network inspect my_network -f '{{range .IPAM.Config}}{{.Gateway}}{{end}}')
           echo "TESTCONTAINERS_HOST_OVERRIDE=$DOCKER_NETWORK_GATEWAY" >> $GITHUB_ENV
+      
+      - name: Verify Docker in container
+        run: docker ps -a
 
       - name: Checkout code
         uses: actions/checkout@v3
