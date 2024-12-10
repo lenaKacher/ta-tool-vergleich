@@ -60,6 +60,7 @@ jobs:
           
       - name: Debug timings.csv
         run: |
+          cd playwright/js
           ls -la
           if [ -f timings.csv ]; then
           echo "timings.csv exists."
@@ -69,6 +70,7 @@ jobs:
           
       - name: Copy timings.csv to playwright-java.csv
         run: |
+          cd playwright/js
           if [ -f timings.csv ]; then
           cp timings.csv playwright-java.csv
           else
