@@ -93,10 +93,12 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Version of Maven
+        run: mvn --version
+
       - name: Run Playwright Java Tests
         if: inputs.RUN_PLAYWRIGHT_JAVA
         run: |
-          mvn --version
           cd playwright/java
           mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args='install-deps' 
           mvn test-compile 
