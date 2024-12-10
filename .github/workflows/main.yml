@@ -134,7 +134,12 @@ jobs:
     services:
       docker:
         image: docker:dind
-        options: --privileged --shm-size=2g
+        options: > 
+          --privileged --shm-size=2g
+          -e DOCKER_TLS_CERTDIR=""
+          --host=tcp://0.0.0.0:2375
+          --host=unix:///var/run/docker.sock
+
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock:ro
     container:
