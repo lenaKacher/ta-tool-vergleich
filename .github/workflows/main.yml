@@ -147,6 +147,9 @@ jobs:
           apt-get install -y curl tar
           apt-get install -y curl tar docker.io
 
+      - name: Using docker.sock
+        run: lsof /var/run/docker.sock 
+
       - name: Verify Docker in container
         run: |
           docker version
@@ -156,10 +159,6 @@ jobs:
         run: |
           export DOCKER_DIND_CONTAINER_ID=$(docker ps -qf "ancestor=docker:dind")
           echo "Docker DIND container ID: $DOCKER_DIND_CONTAINER_ID"
-
-      - name: Debug DIND logs
-        run: |
-          docker logs $(docker ps -aqf "ancestor=docker:dind")
 
       - name: Start Ryuk container
         run: |
