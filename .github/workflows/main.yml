@@ -130,3 +130,62 @@ jobs:
           name: playwright-java.csv
           path: playwright/java/playwright-java.csv
           if-no-files-found: ignore
+          
+  selenium-java:
+    runs-on: self-hosted
+    if: inputs.RUN_SELENIUM_JAVA
+    services:
+      docker:
+        image: docker:dind
+        options: --privileged --shm-size=2g
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+    container:
+      image: ubuntu:latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y curl tar
+          
+      - name: Install Maven
+        run: |
+          MAVEN_VERSION=3.8.8
+          curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
+          tar -xzf maven.tar.gz -C /opt/
+          ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
+  
+      - name: Verify Maven installation
+        run: mvn --version
+
+      - name: Run Selenium Java Tests
+        if: inputs.RUN_SELENIUM_JAVA
+        run: |
+          cd selenium/java
+          mvn test-compile 
+          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+             mvn clean test || true
+          done 
+          cp timings.csv selenium-java.csv
+
+      - name: Debug timings.csv and selenium-java.csv
+        run: |
+          cd selenium/java
+          ls -la
+   
+      - name: Copy timings.csv to selenium-java.csv
+        uses: actions/upload-artifact@v4
+        with:
+          name: selenium-java.csv
+          path: selenium/java/selenium-java.csv
+          if-no-files-found: ignore
