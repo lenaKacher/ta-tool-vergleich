@@ -157,10 +157,6 @@ jobs:
         run: |
           echo "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal" >> $GITHUB_ENV
           echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
-          
-      - name: Get Docker host IP
-        run: |
-          echo "DOCKER_HOST=tcp://172.17.0.1:2375" >> $GITHUB_ENV
 
       - name: List all environment variables
         run: printenv      
