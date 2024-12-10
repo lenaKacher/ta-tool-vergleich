@@ -150,6 +150,15 @@ jobs:
 
       - name: Verify Docker in container
         run: docker ps
+
+      - name: Remove existing Ryuk container (if exists)
+        run: |
+          if [ "$(docker ps -aq -f name=ryuk)" ]; then
+          docker rm -f ryuk
+          echo "Old Ryuk container removed."
+          else
+          echo "No existing Ryuk container to remove."
+          fi
       
       - name: Debug DIND container ID
         run: |
