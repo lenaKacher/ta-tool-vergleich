@@ -141,9 +141,10 @@ jobs:
       image: ubuntu:latest
     
     steps:
-      - name: Install dependencies docker
+      - name: Install dependencies 
         run: |
           apt-get update
+          apt-get install -y curl tar
           apt-get install -y curl tar docker.io
           
       - name: Verify Docker in container
@@ -164,11 +165,6 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: Install dependencies
-        run: |
-          apt-get update
-          apt-get install -y curl tar
           
       - name: Install Maven
         run: |
