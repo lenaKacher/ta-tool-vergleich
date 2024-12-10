@@ -149,9 +149,10 @@ jobs:
 
       - name: Get Docker host IP
         run: |
-          echo "DOCKER_HOST_IP=$(ip route | awk '/default/ { print $3 }')" >> $GITHUB_ENV
           echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
-          echo "TESTCONTAINERS_HOST_OVERRIDE=${{ env.DOCKER_HOST_IP }}" >> $GITHUB_ENV
+          echo "TESTCONTAINERS_HOST_OVERRIDE=192.168.64.1" >> $GITHUB_ENV
+          echo "TESTCONTAINERS_LOG_LEVEL=DEBUG" >> $GITHUB_ENV
+
           
       - name: Verify Docker in container
         run: |
