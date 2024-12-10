@@ -114,7 +114,7 @@ jobs:
           cd playwright/java
           mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args='install-deps' 
           mvn test-compile 
-          for i in $(seq 1 ${{ inputs.numberOfRuns }}); do
+          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
              mvn clean test || true
           done 
           cp timings.csv playwright-java.csv"
