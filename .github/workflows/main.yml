@@ -151,25 +151,25 @@ jobs:
       - name: Verify Docker in container
         run: docker ps
       
-      # - name: Debug DIND container ID
-      #   run: |
-      #     export DOCKER_DIND_CONTAINER_ID=$(docker ps -qf "ancestor=docker:dind")
-      #     echo "Docker DIND container ID: $DOCKER_DIND_CONTAINER_ID"
+      - name: Debug DIND container ID
+        run: |
+          export DOCKER_DIND_CONTAINER_ID=$(docker ps -qf "ancestor=docker:dind")
+          echo "Docker DIND container ID: $DOCKER_DIND_CONTAINER_ID"
 
-      # - name: Start Ryuk container
-      #   run: |
-      #     DOCKER_DIND_CONTAINER_ID=$(docker ps -qf "ancestor=docker:dind")
-      #     if [ -z "$DOCKER_DIND_CONTAINER_ID" ]; then
-      #     echo "Docker DIND container ID is empty. Exiting."
-      #     exit 1
-      #     fi
-      #     echo "Starting Ryuk container connected to DIND container: $DOCKER_DIND_CONTAINER_ID"
-      #     docker run -d \
-      #     --name ryuk \
-      #     --network=container:$DOCKER_DIND_CONTAINER_ID \
-      #     -e DOCKER_HOST=unix:///var/run/docker.sock \
-      #     -v /var/run/docker.sock:/var/run/docker.sock \
-      #     testcontainers/ryuk
+      - name: Start Ryuk container
+        run: |
+          DOCKER_DIND_CONTAINER_ID=$(docker ps -qf "ancestor=docker:dind")
+          if [ -z "$DOCKER_DIND_CONTAINER_ID" ]; then
+          echo "Docker DIND container ID is empty. Exiting."
+          exit 1
+          fi
+          echo "Starting Ryuk container connected to DIND container: $DOCKER_DIND_CONTAINER_ID"
+          docker run -d \
+          --name ryuk \
+          --network=container:$DOCKER_DIND_CONTAINER_ID \
+          -e DOCKER_HOST=unix:///var/run/docker.sock \
+          -v /var/run/docker.sock:/var/run/docker.sock \
+          testcontainers/ryuk
 
       - name: Checkout code
         uses: actions/checkout@v3
