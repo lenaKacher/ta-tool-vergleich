@@ -56,7 +56,7 @@ jobs:
           npx playwright install-deps
           for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
               npm run test || true
-          done &&          
+          done           
           cp timings.csv playwright-java.csv
 
       - name: Debug timings.csv and playwright-java.csv
@@ -97,11 +97,11 @@ jobs:
         if: inputs.RUN_PLAYWRIGHT_JAVA
         run: |
           cd playwright/java
-          mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args='install-deps' &&
-          mvn test-compile &&
+          mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args='install-deps' 
+          mvn test-compile 
           for i in $(seq 1 ${{ inputs.numberOfRuns }}); do
              mvn clean test || true
-          done &&
+          done 
           cp timings.csv playwright-java.csv"
 
       - name: Debug timings.csv and playwright-java.csv
