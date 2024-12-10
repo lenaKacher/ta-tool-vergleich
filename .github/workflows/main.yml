@@ -153,11 +153,17 @@ jobs:
           echo "TESTCONTAINERS_HOST_OVERRIDE=192.168.64.1" >> $GITHUB_ENV
           echo "TESTCONTAINERS_LOG_LEVEL=DEBUG" >> $GITHUB_ENV
 
-          
+      - name: Debug Testcontainers IP
+        run: |
+          echo "Testcontainers is using IP: ${{ env.TESTCONTAINERS_HOST_OVERRIDE }}"
+     
       - name: Verify Docker in container
         run: |
           docker version
           docker ps
+
+      - name: Verify Ryuk port accessibility
+        run: nc -zv 192.168.64.1 32835 || echo "Ryuk port is not accessible"
 
       - name: List all environment variables
         run: printenv      
