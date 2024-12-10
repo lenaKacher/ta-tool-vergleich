@@ -87,13 +87,20 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
         
-      - name: Set up Maven
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Version of Maven
+      - name: Install Maven
+        run: |
+          MAVEN_VERSION=3.8.8
+          curl -fsSL https://downloads.apache.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz -o maven.tar.gz
+          tar -xzf maven.tar.gz -C /opt/
+          ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
+
+      - name: Verify Maven installation
         run: mvn --version
 
       - name: Run Playwright Java Tests
