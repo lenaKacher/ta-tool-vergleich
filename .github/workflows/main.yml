@@ -162,6 +162,15 @@ jobs:
           echo "No existing Ryuk container to remove."
           fi
 
+      - name: Remove existing Ryuk container (if exists)
+        run: |
+          if [ "$(docker ps -aq -f name=my_network)" ]; then
+          docker rm -f my_network
+          echo "Old my_network container removed."
+          else
+          echo "No existing my_network container to remove."
+          fi
+
       - name: Create Docker network
         run: docker network create my_network
 
