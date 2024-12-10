@@ -39,13 +39,13 @@ jobs:
       image: ubuntu:latest
     
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-
-      - name: Checkout code
-        uses: actions/checkout@v3
 
       - name: Run Playwright JavaScript Tests
         if: inputs.RUN_PLAYWRIGHT_JS
@@ -84,14 +84,15 @@ jobs:
       image: ubuntu:latest
     
     steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
       - name: Set up Maven
         uses: actions/setup-java@v3
         with:
           distribution: 'temurin'
           java-version: '17'
-
-      - name: Checkout code
-        uses: actions/checkout@v3
+          cache: 'maven'
 
       - name: Run Playwright Java Tests
         if: inputs.RUN_PLAYWRIGHT_JAVA
