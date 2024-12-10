@@ -134,8 +134,9 @@ jobs:
     services:
       docker:
         image: docker:dind
-        options:
+        options: >
           --privileged --shm-size=2g
+          --network=host
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock:ro
     container:
@@ -155,12 +156,7 @@ jobs:
           
       - name: Set Testcontainers environment variables
         run: |
-          echo "DOCKER_HOST_IP=$(ip route | awk '/default/ { print $3 }')" >> $GITHUB_ENV
           echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
-
-      - name: Set Testcontainers environment variables
-        run: |
-          echo "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal" >> $GITHUB_ENV
 
       - name: List all environment variables
         run: printenv      
