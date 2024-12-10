@@ -58,7 +58,12 @@ jobs:
           npx playwright install-deps
           npm run test
           cp timings.csv playwright-java.csv
-         
+
+      - name: Debug timings.csv and playwright-java.csv
+        run: |
+          cd playwright/js
+          ls -la
+   
       - name: Copy timings.csv to playwright-java.csv
         uses: actions/upload-artifact@v3
         with:
