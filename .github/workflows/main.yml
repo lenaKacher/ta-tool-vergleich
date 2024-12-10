@@ -117,7 +117,7 @@ jobs:
           for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
              mvn clean test || true
           done 
-          cp timings.csv playwright-java.csv"
+          cp timings.csv playwright-java.csv
 
       - name: Debug timings.csv and playwright-java.csv
         run: |
