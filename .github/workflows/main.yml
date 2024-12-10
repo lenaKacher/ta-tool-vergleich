@@ -67,6 +67,6 @@ jobs:
       - name: Copy timings.csv to playwright-java.csv
         uses: actions/upload-artifact@v3
         with:
-          name: playwright-js.csv
-          path: playwright/js/playwright-js.csv
+          name: playwright-java.csv
+          path: playwright/js/playwright-java.csv
           if-no-files-found: ignore
