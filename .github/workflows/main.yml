@@ -26,9 +26,9 @@ on:
         default: '2'
 
 jobs:
-  playwright:
+  playwright-javaScript:
     runs-on: self-hosted
-    if: inputs.RUN_PLAYWRIGHT_JAVA || inputs.RUN_PLAYWRIGHT_JS
+    if: inputs.RUN_PLAYWRIGHT_JS
     services:
       docker:
         image: docker:dind
@@ -39,12 +39,10 @@ jobs:
       image: ubuntu:latest
     
     steps:
-      - name: Install system dependencies 
-        run: |
-          apt-get update && apt-get install -y curl
-          curl -fsSL https://deb.nodesource.com/setup_20.x | bash -
-          apt-get install -y nodejs
-        shell: bash
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
 
       - name: Checkout code
         uses: actions/checkout@v3
