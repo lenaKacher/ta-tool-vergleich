@@ -65,7 +65,7 @@ jobs:
           ls -la
    
       - name: Copy timings.csv to playwright-java.csv
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: playwright-java.csv
           path: playwright/js/playwright-java.csv
