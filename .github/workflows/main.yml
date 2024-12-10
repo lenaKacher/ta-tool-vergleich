@@ -52,7 +52,7 @@ jobs:
       - name: Run Playwright Java
         if: inputs.RUN_PLAYWRIGHT_JAVA
         run: |
-          cd playwright/js
+          cd playwright/java
           npm ci
           npx playwright install
           npx playwright install-deps
