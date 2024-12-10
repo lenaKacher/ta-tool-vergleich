@@ -147,8 +147,11 @@ jobs:
           apt-get install -y curl tar
           apt-get install -y curl tar docker.io
 
-      - name: Using docker.sock
-        run: lsof /var/run/docker.sock 
+      - name: Check who is using docker.sock
+        run: |
+          apt-get update
+          apt-get install -y lsof
+          lsof /var/run/docker.sock || echo "No process is using /var/run/docker.sock"
 
       - name: Verify Docker in container
         run: |
