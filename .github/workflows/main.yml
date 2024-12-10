@@ -93,6 +93,11 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y curl tar
+          
       - name: Install Maven
         run: |
           MAVEN_VERSION=3.8.8
