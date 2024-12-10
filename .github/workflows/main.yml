@@ -57,30 +57,11 @@ jobs:
           npx playwright install
           npx playwright install-deps
           npm run test
-          
-      - name: Debug timings.csv
-        run: |
-          cd playwright/js
-          ls -la
-          if [ -f timings.csv ]; then
-          echo "timings.csv exists."
-          else
-          echo "timings.csv not found."
-          fi
-          
-      - name: Copy timings.csv to playwright-java.csv
-        run: |
-          cd playwright/js
-          if [ -f timings.csv ]; then
           cp timings.csv playwright-java.csv
-          else
-          echo "timings.csv not found. Skipping copy."
-          fi
-
-      - name: Upload playwright-java.csv as artifact
-        if: inputs.RUN_PLAYWRIGHT_JS
+         
+      - name: Copy timings.csv to playwright-java.csv
         uses: actions/upload-artifact@v3
         with:
-          name: playwright-java
-          path: playwright-java.csv
+          name: playwright-js.csv
+          path: playwright/js/playwright-js.csv
           if-no-files-found: ignore
