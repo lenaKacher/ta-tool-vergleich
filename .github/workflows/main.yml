@@ -139,46 +139,41 @@ jobs:
       image: ubuntu:latest
     
     steps:
-      - name: Install dependencies 
+      - name: Install dependencies
         run: |
           apt-get update
-          apt-get install -y curl tar
-          apt-get install -y curl tar docker.io
-          
-      - name: Debug Docker DIND logs
-        run: docker logs $(docker ps -aqf "ancestor=docker:dind")
+          apt-get install -y curl tar docker.io netcat
 
-      - name: Verify Docker in container
-        run: docker ps
+      - name: Get Docker Host IP
+        run: |
+          echo "DOCKER_HOST_IP=$(ip route | awk '/default/ { print $3 }')" >> $GITHUB_ENV
 
-      - name: Remove existing Ryuk container (if exists)
+      - name: Set Testcontainers environment variables
         run: |
-          if [ "$(docker ps -aq -f name=ryuk)" ]; then
-          docker rm -f ryuk
-          echo "Old Ryuk container removed."
-          else
-          echo "No existing Ryuk container to remove."
-          fi
-      
-      - name: Debug DIND container ID
+          echo "TESTCONTAINERS_HOST_OVERRIDE=${{ env.DOCKER_HOST_IP }}" >> $GITHUB_ENV
+          echo "TESTCONTAINERS_LOG_LEVEL=DEBUG" >> $GITHUB_ENV
+
+      - name: Check Ryuk accessibility
         run: |
-          export DOCKER_DIND_CONTAINER_ID=$(docker ps -qf "ancestor=docker:dind")
-          echo "Docker DIND container ID: $DOCKER_DIND_CONTAINER_ID"
+          echo "Testing connection to Ryuk on ${{ env.DOCKER_HOST_IP }}:32855"
+          nc -zv ${{ env.DOCKER_HOST_IP }} 32855 || echo "Ryuk port is not accessible"
+
+      - name: Create Docker network
+        run: docker network create my_network
 
       - name: Start Ryuk container
         run: |
-          DOCKER_DIND_CONTAINER_ID=$(docker ps -qf "ancestor=docker:dind")
-          if [ -z "$DOCKER_DIND_CONTAINER_ID" ]; then
-          echo "Docker DIND container ID is empty. Exiting."
-          exit 1
-          fi
-          echo "Starting Ryuk container connected to DIND container: $DOCKER_DIND_CONTAINER_ID"
           docker run -d \
-          --name ryuk \
-          --network=container:$DOCKER_DIND_CONTAINER_ID \
-          -e DOCKER_HOST=unix:///var/run/docker.sock \
-          -v /var/run/docker.sock:/var/run/docker.sock \
-          testcontainers/ryuk
+            --name ryuk \
+            --network=my_network \
+            -e DOCKER_HOST=unix:///var/run/docker.sock \
+            -v /var/run/docker.sock:/var/run/docker.sock \
+            testcontainers/ryuk
+
+      - name: Set Testcontainers network variables
+        run: |
+          DOCKER_NETWORK_GATEWAY=$(docker network inspect my_network -f '{{range .IPAM.Config}}{{.Gateway}}{{end}}')
+          echo "TESTCONTAINERS_HOST_OVERRIDE=$DOCKER_NETWORK_GATEWAY" >> $GITHUB_ENV
 
       - name: Checkout code
         uses: actions/checkout@v3
