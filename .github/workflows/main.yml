@@ -134,8 +134,7 @@ jobs:
     services:
       docker:
         image: docker:dind
-        options: >
-          --privileged --shm-size=2g
+        options: --privileged --shm-size=2g
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock:ro
     container:
@@ -153,7 +152,6 @@ jobs:
           echo "DOCKER_HOST_IP=$(ip route | awk '/default/ { print $3 }')" >> $GITHUB_ENV
           echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
           echo "TESTCONTAINERS_HOST_OVERRIDE=${{ env.DOCKER_HOST_IP }}" >> $GITHUB_ENV
-
           
       - name: Verify Docker in container
         run: |
