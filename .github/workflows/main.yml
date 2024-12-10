@@ -121,12 +121,12 @@ jobs:
 
       - name: Debug timings.csv and playwright-java.csv
         run: |
-          cd playwright/js
+          cd playwright/java
           ls -la
    
       - name: Copy timings.csv to playwright-java.csv
         uses: actions/upload-artifact@v4
         with:
           name: playwright-java.csv
-          path: playwright/js/playwright-java.csv
+          path: playwright/java/playwright-java.csv
           if-no-files-found: ignore
