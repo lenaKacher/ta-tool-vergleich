@@ -153,10 +153,14 @@ jobs:
           echo "TESTCONTAINERS_HOST_OVERRIDE=${{ env.DOCKER_HOST_IP }}" >> $GITHUB_ENV
           echo "TESTCONTAINERS_LOG_LEVEL=DEBUG" >> $GITHUB_ENV
 
-      - name: Check Ryuk accessibility
+      - name: Remove existing Ryuk container (if exists)
         run: |
-          echo "Testing connection to Ryuk on ${{ env.DOCKER_HOST_IP }}:32855"
-          nc -zv ${{ env.DOCKER_HOST_IP }} 32855 || echo "Ryuk port is not accessible"
+          if [ "$(docker ps -aq -f name=ryuk)" ]; then
+          docker rm -f ryuk
+          echo "Old Ryuk container removed."
+          else
+          echo "No existing Ryuk container to remove."
+          fi
 
       - name: Create Docker network
         run: docker network create my_network
