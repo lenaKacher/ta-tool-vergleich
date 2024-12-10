@@ -136,7 +136,6 @@ jobs:
         image: docker:dind
         options: >
           --privileged --shm-size=2g
-          --network=host
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock:ro
     container:
@@ -148,15 +147,18 @@ jobs:
           apt-get update
           apt-get install -y curl tar
           apt-get install -y curl tar docker.io
+
+      - name: Get Docker host IP
+        run: |
+          echo "DOCKER_HOST_IP=$(ip route | awk '/default/ { print $3 }')" >> $GITHUB_ENV
+          echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
+          echo "TESTCONTAINERS_HOST_OVERRIDE=${{ env.DOCKER_HOST_IP }}" >> $GITHUB_ENV
+
           
       - name: Verify Docker in container
         run: |
           docker version
           docker ps
-          
-      - name: Set Testcontainers environment variables
-        run: |
-          echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
 
       - name: List all environment variables
         run: printenv      
