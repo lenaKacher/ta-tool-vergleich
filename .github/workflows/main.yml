@@ -58,6 +58,15 @@ jobs:
           npx playwright install-deps
           npm run test
           
+      - name: Debug timings.csv
+        run: |
+          ls -la
+          if [ -f timings.csv ]; then
+          echo "timings.csv exists."
+          else
+          echo "timings.csv not found."
+          fi
+          
       - name: Copy timings.csv to playwright-java.csv
         run: |
           if [ -f timings.csv ]; then
