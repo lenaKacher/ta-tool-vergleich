@@ -47,7 +47,7 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Run Playwright JavaScript
+      - name: Run Playwright JavaScript Tests
         if: inputs.RUN_PLAYWRIGHT_JS
         run: |
           cd playwright/js
@@ -58,6 +58,51 @@ jobs:
               npm run test || true
           done &&          
           cp timings.csv playwright-java.csv
+
+      - name: Debug timings.csv and playwright-java.csv
+        run: |
+          cd playwright/js
+          ls -la
+   
+      - name: Copy timings.csv to playwright-java.csv
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-java.csv
+          path: playwright/js/playwright-java.csv
+          if-no-files-found: ignore
+          
+  playwright-java:
+    runs-on: self-hosted
+    if: inputs.RUN_PLAYWRIGHT_JAVA
+    services:
+      docker:
+        image: docker:dind
+        options: --privileged --shm-size=2g
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+    container:
+      image: ubuntu:latest
+    
+    steps:
+      - name: Set up Maven
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Playwright Java Tests
+        if: inputs.RUN_PLAYWRIGHT_JAVA
+        run: |
+          cd playwright/java
+          mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args='install-deps' &&
+          mvn test-compile &&
+          for i in $(seq 1 ${{ inputs.numberOfRuns }}); do
+             mvn clean test || true
+          done &&
+          cp timings.csv playwright-java.csv"
 
       - name: Debug timings.csv and playwright-java.csv
         run: |
