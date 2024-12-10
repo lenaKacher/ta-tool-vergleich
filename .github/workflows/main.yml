@@ -104,9 +104,6 @@ jobs:
           curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
           tar -xzf maven.tar.gz -C /opt/
           ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
-  
-      - name: Verify Maven installation
-        run: mvn --version
 
       - name: Run Playwright Java Tests
         if: inputs.RUN_PLAYWRIGHT_JAVA
@@ -144,6 +141,16 @@ jobs:
       image: ubuntu:latest
     
     steps:
+      - name: Verify Docker in container
+        run: |
+          docker version
+          docker ps
+          
+      - name: Set Testcontainers environment variables
+        run: |
+          echo "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal" >> $GITHUB_ENV
+          echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
+    
       - name: Checkout code
         uses: actions/checkout@v3
         
@@ -164,9 +171,6 @@ jobs:
           curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
           tar -xzf maven.tar.gz -C /opt/
           ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
-  
-      - name: Verify Maven installation
-        run: mvn --version
 
       - name: Run Selenium Java Tests
         if: inputs.RUN_SELENIUM_JAVA
