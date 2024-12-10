@@ -155,8 +155,12 @@ jobs:
           
       - name: Set Testcontainers environment variables
         run: |
-          echo "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal" >> $GITHUB_ENV
+          echo "DOCKER_HOST_IP=$(ip route | awk '/default/ { print $3 }')" >> $GITHUB_ENV
           echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
+
+      - name: Set Testcontainers environment variables
+        run: |
+          echo "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal" >> $GITHUB_ENV
 
       - name: List all environment variables
         run: printenv      
