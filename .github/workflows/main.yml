@@ -131,6 +131,9 @@ jobs:
   selenium-java:
     runs-on: self-hosted
     if: inputs.RUN_SELENIUM_JAVA
+    container:
+      image: ubuntu:latest
+      options: --user root
     
     steps:
       - name: Install dependencies
