@@ -131,31 +131,18 @@ jobs:
   selenium-java:
     runs-on: self-hosted
     if: inputs.RUN_SELENIUM_JAVA
+    services:
+      docker:
+        image: docker:dind
+        options: --privileged --shm-size=2g
     container:
       image: ubuntu:latest
-      options: --user root
     
     steps:
       - name: Install dependencies
         run: |
           apt-get update
-          apt-get install -y curl tar docker.io netcat-openbsd
-
-      - name: Set Docker environment variables
-        run: echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
-
-      - name: Set Testcontainers environment variables
-        run: |
-          echo "TESTCONTAINERS_HOST_OVERRIDE=192.168.0.1" >> $GITHUB_ENV
-          echo "TESTCONTAINERS_LOG_LEVEL=DEBUG" >> $GITHUB_ENV
-
-      - name: Verify Docker
-        run: docker ps
-
-      - name: Check Ryuk accessibility
-        run: |
-          echo "Testing connection to Ryuk on 192.168.0.1:32860"
-          nc -zv 192.168.0.1 32860 || echo "Ryuk port is not accessible"
+          apt-get install -y curl tar docker.io
       
       - name: Verify Docker in container
         run: docker ps -a
@@ -180,10 +167,7 @@ jobs:
         if: inputs.RUN_SELENIUM_JAVA
         run: |
           cd selenium/java
-          mvn test-compile 
-          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-             mvn clean test || true
-          done 
+          $ docker run -it --rm -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test
           cp timings.csv selenium-java.csv
 
       - name: Debug timings.csv and selenium-java.csv
