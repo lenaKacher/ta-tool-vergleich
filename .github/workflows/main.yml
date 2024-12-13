@@ -130,7 +130,7 @@ jobs:
           
   cypress:
     runs-on: self-hosted
-    if: inputs.RUN_CYPRESS
+    if: inputs.RUN_CYPRESS_JS
     services:
       docker:
         image: docker:dind
