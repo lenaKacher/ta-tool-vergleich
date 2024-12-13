@@ -160,7 +160,7 @@ jobs:
           cd cypress/js
           npm ci
           for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-              npm run test || true
+              xvfb-run -- npm run test || true
           done           
           cp timings.csv playwright-js.csv
 
