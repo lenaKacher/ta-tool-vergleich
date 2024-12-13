@@ -144,31 +144,30 @@ jobs:
           apt-get update
           apt-get install -y curl tar docker.io
       
-      - name: Verify Docker in container
-        run: docker ps -a
+      # - name: Verify Docker in container
+      #   run: docker ps -a
 
-      - name: Checkout code
-        uses: actions/checkout@v3
+      # - name: Checkout code
+      #   uses: actions/checkout@v3
         
-      - name: Set up Java
-        uses: actions/setup-java@v3
-        with:
-          distribution: 'temurin'
-          java-version: '17'
+      # - name: Set up Java
+      #   uses: actions/setup-java@v3
+      #   with:
+      #     distribution: 'temurin'
+      #     java-version: '17'
           
-      - name: Install Maven
-        run: |
-          MAVEN_VERSION=3.8.8
-          curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
-          tar -xzf maven.tar.gz -C /opt/
-          ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
+      # - name: Install Maven
+      #   run: |
+      #     MAVEN_VERSION=3.8.8
+      #     curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
+      #     tar -xzf maven.tar.gz -C /opt/
+      #     ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
 
       - name: Run Selenium Java Tests
         if: inputs.RUN_SELENIUM_JAVA
         run: |
-          ls -l /__w/ta-tool-vergleich/ta-tool-vergleich/selenium/java
-          docker run --rm -v /__w/ta-tool-vergleich/ta-tool-vergleich/selenium/java:/workspace -w /workspace alpine ls -l
-         # docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace -v /var/run/docker.sock:/var/run/docker.sock maven:3 ls -l
+          docker run -v /var/run/docker.sock:/var/run/docker.sock docker:latest docker ps
+          docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace maven:3 ls -l
          # docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test-compile
          # cp timings.csv selenium-java.csv
 
