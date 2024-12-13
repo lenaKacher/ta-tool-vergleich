@@ -167,9 +167,11 @@ jobs:
         if: inputs.RUN_SELENIUM_JAVA
         run: |
           docker run -v /var/run/docker.sock:/var/run/docker.sock docker:latest docker ps
-          ls -ld /__w/ta-tool-vergleich/ta-tool-vergleich/selenium/java
-          docker run --rm --mount type=bind,source=/__w/ta-tool-vergleich/ta-tool-vergleich/selenium/java,target=/workspace alpine ls -l /workspace
-
+          cp -r /__w/ta-tool-vergleich/ta-tool-vergleich/selenium/java /tmp/java
+          chmod -R 777 /tmp/java
+          tar -cf java.tar -C /__w/ta-tool-vergleich/ta-tool-vergleich/selenium/java .
+          docker run --rm -v $PWD:/workspace alpine sh -c "tar -xf java.tar -C /workspace && ls -l /workspace"
+          docker run --rm -v /tmp/java:/workspace -w /workspace alpine ls -l
          # docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace maven:3 ls -l
          # docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test-compile
          # cp timings.csv selenium-java.csv
