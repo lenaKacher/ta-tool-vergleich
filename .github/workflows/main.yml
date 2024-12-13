@@ -168,7 +168,7 @@ jobs:
         run: |
           cd selenium/java
           ls -la
-          docker run -i --rm -v $PWD:$PWD -w $PWD -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test-compile
+          docker run -i --rm -v $PWD:/workspace -w /workspace -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test-compile
           cp timings.csv selenium-java.csv
 
       - name: Debug timings.csv and selenium-java.csv
