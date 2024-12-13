@@ -166,8 +166,10 @@ jobs:
       - name: Run Selenium Java Tests
         if: inputs.RUN_SELENIUM_JAVA
         run: |
+          echo $PWD
           cd selenium/java
           ls -la
+          docker run -i --rm -v $PWD:/workspace -w /workspace -v /var/run/docker.sock:/var/run/docker.sock maven:3 ls -l
           docker run -i --rm -v $PWD:/workspace -w /workspace -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test-compile
           cp timings.csv selenium-java.csv
 
