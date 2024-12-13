@@ -130,7 +130,7 @@ jobs:
           
   cypress:
     runs-on: self-hosted
-    if: inputs.RUN_PLAYWRIGHT_JAVA
+    if: inputs.RUN_CYPRESS
     services:
       docker:
         image: docker:dind
@@ -150,7 +150,7 @@ jobs:
           node-version: '18'
           
       - name: Run Cypress Tests
-        if: inputs.RUN_CYPRESS
+        if: inputs.RUN_CYPRESS_JS
         run: |
           cd cypress/js
           npm ci
