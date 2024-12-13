@@ -151,8 +151,18 @@ jobs:
 
       - name: Install Xvfb
         run: |
-          apt-get update
-          apt-get install -y xvfb
+          apt-get update && apt-get install -y \
+          libgtk2.0-0 \
+          libgtk-3-0 \
+          libgbm-dev \
+          libnotify-dev \
+          libgconf-2-4 \
+          libnss3 \
+          libxss1 \
+          libasound2 \
+          libxtst6 \
+          xauth \
+          xvfb
           
       - name: Run Cypress Tests
         if: inputs.RUN_CYPRESS_JS
@@ -160,7 +170,7 @@ jobs:
           cd cypress/js
           npm ci
           for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-              xvfb-run -- npm run test || true
+              npm run test || true
           done           
           cp timings.csv playwright-js.csv
 
