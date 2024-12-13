@@ -128,6 +128,49 @@ jobs:
           path: playwright/java/playwright-java.csv
           if-no-files-found: ignore
           
+  cypress:
+    runs-on: self-hosted
+    if: inputs.RUN_PLAYWRIGHT_JAVA
+    services:
+      docker:
+        image: docker:dind
+        options: --privileged --shm-size=2g
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock:ro
+    container:
+      image: ubuntu:latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+        
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          
+      - name: Run Cypress Tests
+        if: inputs.RUN_CYPRESS
+        run: |
+          cd cypress/js
+          npm ci
+          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+              npm run test || true
+          done           
+          cp timings.csv playwright-js.csv
+
+      - name: Debug timings.csv and cypress-js.csv
+        run: |
+          cd cypress/js
+          ls -la
+   
+      - name: Copy timings.csv to cypress-js.csv
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-js.csv
+          path: cypress/js/cypress-js.csv
+          if-no-files-found: ignore
+          
   selenium-java:
     runs-on: self-hosted
     if: inputs.RUN_SELENIUM_JAVA
@@ -167,13 +210,7 @@ jobs:
         if: inputs.RUN_SELENIUM_JAVA
         run: |
           docker run -v /var/run/docker.sock:/var/run/docker.sock docker:latest docker ps
-          cp -r /__w/ta-tool-vergleich/ta-tool-vergleich/selenium/java /tmp/java
-          chmod -R 777 /tmp/java
-          tar -cf java.tar -C /__w/ta-tool-vergleich/ta-tool-vergleich/selenium/java .
-          docker run --rm -v $PWD:/workspace alpine sh -c "tar -xf java.tar -C /workspace && ls -l /workspace"
-          docker run --rm -v /tmp/java:/workspace -w /workspace alpine ls -l
-         # docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace maven:3 ls -l
-         # docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test-compile
+          docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace maven:3 mvn test-compile
          # cp timings.csv selenium-java.csv
 
       - name: Debug timings.csv and selenium-java.csv
