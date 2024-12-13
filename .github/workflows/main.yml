@@ -166,8 +166,9 @@ jobs:
       - name: Run Selenium Java Tests
         if: inputs.RUN_SELENIUM_JAVA
         run: |
-          docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test-compile
-          cp timings.csv selenium-java.csv
+          docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn ls -l
+         # docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test-compile
+         # cp timings.csv selenium-java.csv
 
       - name: Debug timings.csv and selenium-java.csv
         run: |
