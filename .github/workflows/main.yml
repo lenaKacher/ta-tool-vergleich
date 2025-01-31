@@ -34,7 +34,7 @@ jobs:
         image: docker:dind
         options: --privileged --shm-size=2g
         volumes:
-          - /var/run/docker.sock:/var/run/docker.sock:ro
+          - /var/run/docker.sock:/var/run/docker.sock
     container:
       image: ubuntu:latest
 
@@ -78,7 +78,7 @@ jobs:
         image: docker:dind
         options: --privileged --shm-size=2g
         volumes:
-          - /var/run/docker.sock:/var/run/docker.sock:ro
+          - /var/run/docker.sock:/var/run/docker.sock
     container:
       image: ubuntu:latest
 
@@ -133,7 +133,7 @@ jobs:
         image: docker:dind
         options: --privileged --shm-size=2g
         volumes:
-          - /var/run/docker.sock:/var/run/docker.sock:ro
+          - /var/run/docker.sock:/var/run/docker.sock
     container:
       image: ubuntu:latest
 
@@ -180,7 +180,9 @@ jobs:
         options: --privileged --shm-size=2g
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
-
+    container:
+      image: ubuntu:latest
+      
     steps:
      - name: Checkout code
        uses: actions/checkout@v3
@@ -194,7 +196,7 @@ jobs:
      - name: Install dependencies
        run: |
           apt-get update
-          apt-get install -y curl tar
+          apt-get install -y curl tar docker.io 
 
      - name: Install Maven
        run: |
