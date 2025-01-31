@@ -232,6 +232,14 @@ jobs:
       image: ubuntu:latest
       
     steps:
+     - name: Install dependencies
+       run: |
+          apt-get update
+          apt-get install -y curl tar docker.io
+      
+     - name: Verify Docker in container
+       run: docker ps -a
+      
      - name: Checkout code
        uses: actions/checkout@v3
 
@@ -287,16 +295,24 @@ jobs:
       options: --privileged 
       
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v3
+     - name: Install dependencies
+       run: |
+          apt-get update
+          apt-get install -y curl tar docker.io
+      
+     - name: Verify Docker in container
+       run: docker ps -a
+      
+     - name: Checkout code
+       uses: actions/checkout@v3
 
-      - name: Set up Node.js
-        uses: actions/setup-node@v3
-        with:
+     - name: Set up Node.js
+       uses: actions/setup-node@v3
+       with:
           node-version: '18'
 
-      - name: Run Selenium JavaScript tests
-        run: |
+     - name: Run Selenium JavaScript tests
+       run: |
           cd selenium/js
           npm ci
           docker run -v /var/run/docker.sock:/var/run/docker.sock docker:latest docker ps
@@ -305,9 +321,9 @@ jobs:
              mvn clean test || true
           done
           cp timings.csv selenium-js.csv
-      - name: Upload Selenium JS results
-        uses: actions/upload-artifact@v4
-        with:
+     - name: Upload Selenium JS results
+       uses: actions/upload-artifact@v4
+       with:
           name: selenium-js-results
           path: selenium/js/selenium-js.csv
           if-no-files-found: ignore
