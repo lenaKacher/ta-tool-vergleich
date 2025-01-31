@@ -53,7 +53,7 @@ public class SeleniumBuyProductsTest {
                     //.withRecordingMode(VncRecordingMode.RECORD_ALL, file, VncRecordingFormat.MP4)
                     //.withRecordingFileFactory(new DefaultRecordingFileFactory())
                      .withNetworkMode("host")  
-                     .withCreateContainerCmdModifier(cmd -> cmd.getHostConfig().withShmSize(512 * 1024 * 1024))
+                     .withCreateContainerCmdModifier(cmd -> cmd.getHostConfig().withShmSize(512L * 1024L * 1024L))
                      .withCapabilities(new ChromeOptions());
             
 
