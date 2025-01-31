@@ -294,7 +294,7 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-		  
+	  
       - name: Run Selenium JavaScript tests
         run: |
           cd selenium/js
