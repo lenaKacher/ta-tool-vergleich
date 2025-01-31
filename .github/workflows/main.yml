@@ -171,47 +171,55 @@ jobs:
           path: cypress/js/cypress-js.csv
           if-no-files-found: ignore
 
-  selenium-java:
+  selenium_java:
     runs-on: self-hosted
     if: inputs.RUN_SELENIUM_JAVA
     services:
       docker:
         image: docker:dind
         options: --privileged --shm-size=2g
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
     container:
       image: ubuntu:latest
 
     steps:
-      - name: Install dependencies
+      - uses: actions/checkout@v3
+      - name: Run Selenium Java tests
         run: |
-          apt-get update
-          apt-get install -y curl tar docker.io
+          cd selenium/java
+          mvn test-compile
+             for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+             mvn clean test || true
+          done
+          cp timings.csv selenium-java.csv
+      - name: Upload Selenium Java results
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium-java-results
+          path: selenium/java/selenium-java.csv
+
+  selenium_pop:
+    runs-on: self-hosted
+    if: inputs.RUN_SELENIUM_POP
+    services:
+      docker:
+        image: docker:dind
+        options: --privileged --shm-size=2g
+    container:
+      image: ubuntu:latest
       
-      # - name: Verify Docker in container
-      #   run: docker ps -a
-
-      # - name: Checkout code
-      #   uses: actions/checkout@v3
-
-      # - name: Set up Java
-      #   uses: actions/setup-java@v3
-      #   with:
-      #     distribution: 'temurin'
-      #     java-version: '17'
-
-      # - name: Install Maven
-      #   run: |
-      #     MAVEN_VERSION=3.8.8
-      #     curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
-      #     tar -xzf maven.tar.gz -C /opt/
-      #     ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
-
-      - name: Run Selenium Java Tests
-        if: inputs.RUN_SELENIUM_JAVA
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Selenium Java Page Object Pattern tests
         run: |
+          cd selenium/java_PageObjectPattern
           docker run -v /var/run/docker.sock:/var/run/docker.sock docker:latest docker ps
           docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace maven:3 mvn test-compile
-         # cp timings.csv selenium-java.csv
+             for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+             mvn clean test || true
+          done
+          cp timings.csv selenium-java.csv
       - name: Debug timings.csv and selenium-java.csv
         run: |
           cd selenium/java
@@ -223,3 +231,38 @@ jobs:
           name: selenium-java.csv
           path: selenium/java/selenium-java.csv
           if-no-files-found: ignore
+
+      - name: Upload Selenium Java POP results
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium-java-pop-results
+          path: selenium/java_PageObjectPattern/selenium-java-pop.csv
+
+  selenium_js:
+    runs-on: self-hosted
+    if: inputs.RUN_SELENIUM_JS
+    services:
+      docker:
+        image: docker:dind
+        options: --shm-size=2g
+    container:
+      image: ubuntu:latest
+      options: --privileged 
+      
+    steps:
+      - uses: actions/checkout@v3
+      - name: Run Selenium JavaScript tests
+        run: |
+          cd selenium/js
+          npm ci
+          docker run -v /var/run/docker.sock:/var/run/docker.sock docker:latest docker ps
+          docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace maven:3 mvn test-compile
+             for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+             mvn clean test || true
+          done
+          cp timings.csv selenium-js.csv
+      - name: Upload Selenium JS results
+        uses: actions/upload-artifact@v3
+        with:
+          name: selenium-js-results
+          path: selenium/js/selenium-js.csv
