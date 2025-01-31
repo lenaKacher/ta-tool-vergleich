@@ -48,12 +48,12 @@ public class SeleniumBuyProductsTest {
 
 
     @ClassRule
-    public static BrowserWebDriverContainer chrome   
+    public static BrowserWebDriverContainer chrome =
         new BrowserWebDriverContainer<>(DockerImageName.parse("selenium/standalone-chrome:126.0"))
                     //.withRecordingMode(VncRecordingMode.RECORD_ALL, file, VncRecordingFormat.MP4)
                     //.withRecordingFileFactory(new DefaultRecordingFileFactory())
                      .withNetworkMode("host")  
-                     .withCreateContainerCmdModifier(cmd -> cmd.getHostConfig().withShmSize(512 * 1024 * 1024));
+                     .withCreateContainerCmdModifier(cmd -> cmd.getHostConfig().withShmSize(512 * 1024 * 1024))
                      .withCapabilities(new ChromeOptions());
             
 
