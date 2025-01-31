@@ -184,14 +184,6 @@ jobs:
       image: ubuntu:latest
 
     steps:
-     - name: Install dependencies
-       run: |
-          apt-get update
-          apt-get install -y curl tar docker.io
-      
-     - name: Verify Docker in container
-       run: docker ps -a
-       
      - name: Checkout code
        uses: actions/checkout@v3
 
@@ -212,13 +204,16 @@ jobs:
           curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
           tar -xzf maven.tar.gz -C /opt/
           ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
+
+     - name: Docker
+       run: |
+          export DOCKER_HOST=unix:///var/run/docker.sock
+          docker pull selenium/standalone-chrome:126.0
           
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
           export TESTCONTAINERS_RYUK_DISABLED=true 
-          export DOCKER_HOST=unix:///var/run/docker.sock
-          docker pull selenium/standalone-chrome:126.0
           mvn test-compile
              for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
              mvn clean test || true
