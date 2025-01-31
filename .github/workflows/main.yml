@@ -194,7 +194,7 @@ jobs:
           done
           cp timings.csv selenium-java.csv
       - name: Upload Selenium Java results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: selenium-java-results
           path: selenium/java/selenium-java.csv
@@ -262,7 +262,7 @@ jobs:
           done
           cp timings.csv selenium-js.csv
       - name: Upload Selenium JS results
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: selenium-js-results
           path: selenium/js/selenium-js.csv
