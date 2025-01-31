@@ -214,6 +214,7 @@ jobs:
      - name: Debug Selenium Container
        run: |
           docker ps -a --filter "ancestor=selenium/standalone-chrome:126.0"
+          docker logs $(docker ps -a -q --filter "ancestor=selenium/standalone-chrome:126.0")
      
      - name: Run Selenium Java tests
        run: |
