@@ -184,20 +184,42 @@ jobs:
       image: ubuntu:latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Run Selenium Java tests
-        run: |
+     - name: Checkout code
+       uses: actions/checkout@v3
+
+     - name: Set up Java
+       uses: actions/setup-java@v3
+       with:
+          distribution: 'temurin'
+          java-version: '17'
+
+     - name: Install dependencies
+       run: |
+          apt-get update
+          apt-get install -y curl tar
+
+     - name: Install Maven
+       run: |
+          MAVEN_VERSION=3.8.8
+          curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
+          tar -xzf maven.tar.gz -C /opt/
+          ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
+          
+     - name: Run Selenium Java tests
+       run: |
           cd selenium/java
           mvn test-compile
              for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
              mvn clean test || true
           done
           cp timings.csv selenium-java.csv
-      - name: Upload Selenium Java results
-        uses: actions/upload-artifact@v4
-        with:
-          name: selenium-java-results
-          path: selenium/java/selenium-java.csv
+          
+     - name: Upload Selenium Java results
+       uses: actions/upload-artifact@v4
+       with:
+         name: selenium-java-results
+         path: selenium/java/selenium-java.csv
+         if-no-files-found: ignore
 
   selenium_pop:
     runs-on: self-hosted
@@ -210,9 +232,29 @@ jobs:
       image: ubuntu:latest
       
     steps:
-      - uses: actions/checkout@v3
-      - name: Run Selenium Java Page Object Pattern tests
-        run: |
+     - name: Checkout code
+       uses: actions/checkout@v3
+
+     - name: Set up Java
+       uses: actions/setup-java@v3
+       with:
+          distribution: 'temurin'
+          java-version: '17'
+
+     - name: Install dependencies
+       run: |
+          apt-get update
+          apt-get install -y curl tar
+
+     - name: Install Maven
+       run: |
+          MAVEN_VERSION=3.8.8
+          curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
+          tar -xzf maven.tar.gz -C /opt/
+          ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
+
+     - name: Run Selenium Java Page Object Pattern tests
+       run: |
           cd selenium/java_PageObjectPattern
           docker run -v /var/run/docker.sock:/var/run/docker.sock docker:latest docker ps
           docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace maven:3 mvn test-compile
@@ -220,23 +262,18 @@ jobs:
              mvn clean test || true
           done
           cp timings.csv selenium-java.csv
-      - name: Debug timings.csv and selenium-java.csv
-        run: |
+          
+     - name: Debug timings.csv and selenium-java.csv
+       run: |
           cd selenium/java
           ls -la
    
-      - name: Copy timings.csv to selenium-java.csv
-        uses: actions/upload-artifact@v4
-        with:
-          name: selenium-java.csv
-          path: selenium/java/selenium-java.csv
-          if-no-files-found: ignore
-
-      - name: Upload Selenium Java POP results
-        uses: actions/upload-artifact@v3
-        with:
-          name: selenium-java-pop-results
+     - name: Copy timings.csv to selenium-java-pop.csv
+       uses: actions/upload-artifact@v4
+       with:
+          name: selenium-java-pop.csv
           path: selenium/java_PageObjectPattern/selenium-java-pop.csv
+          if-no-files-found: ignore
 
   selenium_js:
     runs-on: self-hosted
@@ -250,7 +287,14 @@ jobs:
       options: --privileged 
       
     steps:
-      - uses: actions/checkout@v3
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+		  
       - name: Run Selenium JavaScript tests
         run: |
           cd selenium/js
@@ -266,3 +310,4 @@ jobs:
         with:
           name: selenium-js-results
           path: selenium/js/selenium-js.csv
+          if-no-files-found: ignore
