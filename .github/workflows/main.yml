@@ -65,6 +65,7 @@ jobs:
           export DOCKER_HOST=unix:///var/run/docker.sock
           docker pull selenium/standalone-chrome:126.0
           docker run --rm --privileged selenium/standalone-chrome:126.0 google-chrome --version
+          docker -v
      
      - name: Run Selenium Java tests
        run: |
