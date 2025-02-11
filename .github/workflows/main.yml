@@ -64,6 +64,7 @@ jobs:
        run: |
           export DOCKER_HOST=unix:///var/run/docker.sock
           docker pull selenium/standalone-chrome:126.0
+          docker container prune
           docker ps -a
           
      - name: Run Selenium Java tests
