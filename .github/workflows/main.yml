@@ -36,8 +36,7 @@ jobs:
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
     container:
-        image: selenium/standalone-chrome:126.0
-        options: --shm-size=2g
+        image: ubuntu:latest
       
     steps:
      - name: Checkout code
