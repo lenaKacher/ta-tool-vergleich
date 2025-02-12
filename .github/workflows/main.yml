@@ -38,8 +38,7 @@ jobs:
       options: --privileged
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-        - $PWD:$PWD
-      
+        - ${{ github.workspace }}:${{ github.workspace }}      
     steps:
      - name: Checkout code
        uses: actions/checkout@v3
