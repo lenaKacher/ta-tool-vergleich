@@ -52,17 +52,15 @@ jobs:
 
      - name: Start Selenium manually
        run: |
-          docker stop seleniumTest
-          docker rm seleniumTest
-          docker stop selenium_test
-          docker rm selenium_test
           docker run -d --name selenium_test \
           --shm-size=2g -p 4444:4444 \
           selenium/standalone-chrome:126.0
       
      - name: check Docker-containers
        if: always()
-       run: docker ps -a    
+       run: | 
+         docker ps -a 
+         docker logs seleniumTest
           
      - name: Run Selenium Java tests
        run: |
