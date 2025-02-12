@@ -49,10 +49,10 @@ jobs:
      #      distribution: 'temurin'
      #      java-version: '17'
 
-     # - name: Install dependencies
-     #   run: |
-     #      apt-get update
-     #      apt-get install -y curl tar docker.io 
+     - name: Install dependencies
+       run: |
+          apt-get update
+          apt-get install -y curl tar docker.io 
 
      # - name: Install Maven
      #   run: |
