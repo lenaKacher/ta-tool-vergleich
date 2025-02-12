@@ -52,6 +52,7 @@ jobs:
 
      - name: Start Selenium manually
        run: |
+          docker stop bbf2e0aa9b5c 0509f77800e3 8abee0f87bff 
           docker rm bbf2e0aa9b5c 0509f77800e3 8abee0f87bff 
           docker run -d --name selenium_test \
           --shm-size=2g -p 4444:4444 \
