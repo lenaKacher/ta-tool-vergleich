@@ -63,6 +63,8 @@ jobs:
      - name: Docker
        run: |
           export DOCKER_HOST=unix:///var/run/docker.sock
+          docker stop jovial_kilby vibrant_feistel serene_perlman
+          docker rm jovial_kilby vibrant_feistel serene_perlman
           docker ps -a
           
      - name: Run Selenium Java tests
