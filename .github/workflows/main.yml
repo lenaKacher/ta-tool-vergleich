@@ -64,7 +64,7 @@ jobs:
        run: |
           export DOCKER_HOST=unix:///var/run/docker.sock
           docker pull selenium/standalone-chrome:126.0
-          docker docker rm cecf34e70ef0 483eaf8c8c1a 4783b3de91ec b86a9db83c94
+          docker rm cecf34e70ef0 483eaf8c8c1a 4783b3de91ec b86a9db83c94
           docker ps -a
           
      - name: Run Selenium Java tests
