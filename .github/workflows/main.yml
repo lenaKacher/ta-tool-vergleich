@@ -38,7 +38,9 @@ jobs:
       options: --privileged
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock
-        - ${{ github.workspace }}:${{ github.workspace }}      
+        - ${{ github.workspace }}:${{ github.workspace }}  
+      env:
+        TESTCONTAINERS_HOST_OVERRIDE: host.docker.internal
     steps:
      - name: Checkout code
        uses: actions/checkout@v3
