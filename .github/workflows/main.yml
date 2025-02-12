@@ -65,22 +65,22 @@ jobs:
           export DOCKER_HOST=unix:///var/run/docker.sock
           docker ps -a
           
-     # - name: Run Selenium Java tests
-     #   run: |
-     #      cd selenium/java
-     #      export TESTCONTAINERS_RYUK_DISABLED=true 
-     #      mvn test-compile
-     #         for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-     #         mvn clean test || true
-     #      done
-     #      cp timings.csv selenium-java.csv
+     - name: Run Selenium Java tests
+       run: |
+          cd selenium/java
+          export TESTCONTAINERS_RYUK_DISABLED=true 
+          mvn test-compile
+             for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+             mvn clean test || true
+          done
+          cp timings.csv selenium-java.csv
           
-     # - name: Upload Selenium Java results
-     #   uses: actions/upload-artifact@v4
-     #   with:
-     #     name: selenium-java-results
-     #     path: selenium/java/selenium-java.csv
-     #     if-no-files-found: ignore
+     - name: Upload Selenium Java results
+       uses: actions/upload-artifact@v4
+       with:
+         name: selenium-java-results
+         path: selenium/java/selenium-java.csv
+         if-no-files-found: ignore
 
   selenium_pop:
     runs-on: self-hosted
