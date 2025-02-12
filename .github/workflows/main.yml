@@ -70,9 +70,8 @@ jobs:
           cd selenium/java
           export TESTCONTAINERS_RYUK_DISABLED=true 
           mvn test-compile
-             for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-             mvn clean test -Dorg.slf4j.simpleLogger.defaultLogLevel=debug || true
-          done
+          mvn clean test
+          docker ps -a
           cp timings.csv selenium-java.csv
           
      - name: Upload Selenium Java results
