@@ -58,7 +58,8 @@ public class SeleniumBuyProductsTest {
     @BeforeClass
     public static void beforeClass() {
         beforeBrowserStartTS = System.currentTimeMillis();
-        chrome.start(); 
+        String seleniumUrl = "http://localhost:4444/wd/hub";
+        System.out.println("Подключаемся к Selenium по адресу: " + seleniumUrl);
         System.out.println("Selenium запущен по адресу: " + chrome.getSeleniumAddress());
         driver = new RemoteWebDriver(chrome.getSeleniumAddress(), new ChromeOptions());
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
