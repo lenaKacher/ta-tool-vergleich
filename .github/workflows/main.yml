@@ -59,9 +59,8 @@ jobs:
      - name: check Docker-containers
        if: always()
        run: | 
-         docker ps -a 
-         docker logs selenium_test
-
+         docker ps -a | grep selenium_test
+      
      - name: Docker-container log
        if: always()
        run: | 
