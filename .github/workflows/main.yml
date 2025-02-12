@@ -59,7 +59,8 @@ jobs:
      - name: check Docker-containers
        if: always()
        run: | 
-         docker ps -a | grep selenium_test
+         docker ps -a --filter name=selenium_test
+         docker inspect selenium_test | grep -i "exit"
       
      - name: Docker-container log
        if: always()
