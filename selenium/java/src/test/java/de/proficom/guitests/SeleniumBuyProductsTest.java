@@ -58,6 +58,8 @@ public class SeleniumBuyProductsTest {
     @BeforeClass
     public static void beforeClass() {
         beforeBrowserStartTS = System.currentTimeMillis();
+        chrome.start(); 
+        System.out.println("Selenium запущен по адресу: " + chrome.getSeleniumAddress());
         driver = new RemoteWebDriver(chrome.getSeleniumAddress(), new ChromeOptions());
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         explicitWait = new WebDriverWait(driver, Duration.ofSeconds(10));
