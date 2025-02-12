@@ -52,24 +52,13 @@ jobs:
 
      - name: Start Selenium manually
        run: |
-          docker run -d --name seleniumTest \
+          docker run -d --name selenium_test \
           --shm-size=2g -p 4444:4444 \
           selenium/standalone-chrome:126.0
       
      - name: check Docker-containers
        if: always()
        run: docker ps -a    
-
-     - name: Wait for Selenium to start
-       run: |
-        echo "Waiting for Selenium..."
-        for i in {1..10}; do
-        curl -s http://localhost:4444/status && exit 0
-        echo "Selenium not ready yet..."
-        sleep 2
-        done
-        echo "Selenium failed to start"
-        exit 1
           
      - name: Run Selenium Java tests
        run: |
@@ -88,8 +77,6 @@ jobs:
        run: |
         docker stop selenium_test
         docker rm selenium_test 
-        docker stop seleniumTest
-        docker rm seleniumTest
       
      - name: Upload Selenium Java results
        uses: actions/upload-artifact@v4
