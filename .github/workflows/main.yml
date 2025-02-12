@@ -45,28 +45,22 @@ jobs:
      - name: Checkout code
        uses: actions/checkout@v3
 
-     # - name: Set up Java
-     #   uses: actions/setup-java@v3
-     #   with:
-     #      distribution: 'temurin'
-     #      java-version: '17'
-
      - name: Install dependencies
        run: |
           apt-get update
           apt-get install -y curl tar docker.io 
 
-     # - name: Install Maven
-     #   run: |
-     #      MAVEN_VERSION=3.8.8
-     #      curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
-     #      tar -xzf maven.tar.gz -C /opt/
-     #      ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
-
-     - name: Docker
+     - name: Start Selenium manually
        run: |
-          export DOCKER_HOST=unix:///var/run/docker.sock
-          docker ps -a
+          docker run -d --name selenium_test \
+          --shm-size=2g -p 4444:4444 \
+          selenium/standalone-chrome:126.0
+
+     - name: Wait for Selenium to be ready
+       run: |
+          echo "Waiting for Selenium to start..."
+          sleep 10
+          curl -v http://localhost:4444/status || true
           
      - name: Run Selenium Java tests
        run: |
@@ -74,7 +68,6 @@ jobs:
           export TESTCONTAINERS_RYUK_DISABLED=true 
           mvn test-compile
           mvn clean test
-          docker ps -a
           cp timings.csv selenium-java.csv
       
      - name: check Docker-containers
