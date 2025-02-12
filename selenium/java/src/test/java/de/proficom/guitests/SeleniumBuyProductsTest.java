@@ -58,9 +58,7 @@ public class SeleniumBuyProductsTest {
     @BeforeClass
     public static void beforeClass() {
         beforeBrowserStartTS = System.currentTimeMillis();
-        String seleniumUrl = "http://host.docker.internal:4444/wd/hub";
-        System.out.println("Подключаемся к Selenium по адресу: " + seleniumUrl);
-        driver = new RemoteWebDriver(new URL(seleniumUrl), new ChromeOptions());
+        driver = new RemoteWebDriver(chrome.getSeleniumAddress(), new ChromeOptions());
         driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         explicitWait = new WebDriverWait(driver, Duration.ofSeconds(10));
     }
