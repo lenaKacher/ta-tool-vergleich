@@ -52,7 +52,7 @@ jobs:
 
      - name: Start Selenium manually
        run: |
-          docker run -d --name selenium_test \
+          docker run -it --name selenium_test \
           --shm-size=2g -p 4444:4444 \
           selenium/standalone-chrome:126.0
       
