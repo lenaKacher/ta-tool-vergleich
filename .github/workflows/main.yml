@@ -73,7 +73,11 @@ jobs:
           mvn clean test
           docker ps -a
           cp timings.csv selenium-java.csv
-          
+      
+     - name: check Docker-containers
+       if: always()
+       run: docker ps -a
+      
      - name: Upload Selenium Java results
        uses: actions/upload-artifact@v4
        with:
