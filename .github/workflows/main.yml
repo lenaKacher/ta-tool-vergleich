@@ -32,11 +32,12 @@ jobs:
     services:
       docker:
         image: docker:dind
-        options: --privileged --shm-size=2g
+        options: --privileged
         volumes:
           - /var/run/docker.sock:/var/run/docker.sock
     container:
-      image: ubuntu:latest
+        image: selenium/standalone-chrome:126.0
+        options: --shm-size=2g
       
     steps:
      - name: Checkout code
@@ -63,8 +64,7 @@ jobs:
      - name: Docker
        run: |
           export DOCKER_HOST=unix:///var/run/docker.sock
-          docker pull selenium/standalone-chrome:126.0
-          docker rm cecf34e70ef0 483eaf8c8c1a 4783b3de91ec b86a9db83c94
+          docker rm 82ee5895ef5e c53a51f2c076 4d51ac4e7fd1 7bc6cbfa89c6 958acd78d5f3 f9d71b92fec0 0fa9f5a6b730 276875e2bbf0 18ed0494fa1b
           docker ps -a
           
      - name: Run Selenium Java tests
