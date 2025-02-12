@@ -61,6 +61,11 @@ jobs:
        run: | 
          docker ps -a 
          docker logs selenium_test
+
+     - name: Docker-container log
+       if: always()
+       run: | 
+         docker logs selenium_test
           
      - name: Run Selenium Java tests
        run: |
