@@ -52,8 +52,20 @@ jobs:
 
      - name: Start Selenium manually
        run: |
-          docker run --rm --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "ls -lah /opt/selenium/selenium-server.jar"
-          
+          docker run --rm --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "java -version"
+
+
+     - name: Start Selenium container (debug mode)
+       run: |
+          echo "Starting Selenium container..."
+          docker run -d --name selenium_test \
+            --shm-size=2g -p 4444:4444 \
+            --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "sleep infinity"
+          docker ps -a
+
+     - name: Check Selenium container logs
+       run: docker logs selenium_test || true
+
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
@@ -66,11 +78,11 @@ jobs:
        if: always()
        run: docker ps -a
        
-     # - name: remove Docker-container
-     #   if: always()
-     #   run: |
-     #    docker stop selenium_test
-     #    docker rm selenium_test 
+     - name: remove Docker-container
+       if: always()
+       run: |
+        docker stop selenium_test
+        docker rm selenium_test 
       
      - name: Upload Selenium Java results
        uses: actions/upload-artifact@v4
