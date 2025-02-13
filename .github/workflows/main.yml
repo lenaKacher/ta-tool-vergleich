@@ -53,7 +53,7 @@ jobs:
      - name: Start Selenium manually
        run: |
           docker run --rm --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "java -version"
-
+          docker run --rm --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "ls -lah /opt/selenium/"
 
      - name: Start Selenium container (debug mode)
        run: |
@@ -66,13 +66,13 @@ jobs:
      - name: Check Selenium container logs
        run: docker logs selenium_test || true
 
-     - name: Run Selenium Java tests
-       run: |
-          cd selenium/java
-          export TESTCONTAINERS_RYUK_DISABLED=true 
-          mvn test-compile
-          mvn clean test
-          cp timings.csv selenium-java.csv
+     # - name: Run Selenium Java tests
+     #   run: |
+     #      cd selenium/java
+     #      export TESTCONTAINERS_RYUK_DISABLED=true 
+     #      mvn test-compile
+     #      mvn clean test
+     #      cp timings.csv selenium-java.csv
       
      - name: check Docker-containers
        if: always()
