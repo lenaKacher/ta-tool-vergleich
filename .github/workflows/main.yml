@@ -52,7 +52,7 @@ jobs:
 
      - name: Start Selenium manually
        run: |
-          docker run --rm --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "find / -name 'selenium-server.jar' 2>/dev/null"
+          docker run --rm --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "ls -lah /opt/selenium/selenium-server.jar"
           
      - name: Run Selenium Java tests
        run: |
