@@ -49,11 +49,12 @@ jobs:
        run: |
           apt-get update
           apt-get install -y curl tar docker.io
-
-     - name: Start Selenium manually
+          
+     - name: remove Docker-container
+       if: always()
        run: |
-          docker run --rm --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "java -version"
-          docker run --rm --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "ls -lah /opt/selenium/"
+          docker stop selenium_test
+          docker rm selenium_test 
           
      - name: Start Selenium container (debug mode)
        run: |
@@ -67,15 +68,15 @@ jobs:
        run: |
           docker exec selenium_test java -jar /opt/selenium/selenium-server.jar standalone
           curl -v http://localhost:4444/status
-          docker logs selenium_test || true
+          timeout 10s docker logs selenium_test || true
 
-     # - name: Run Selenium Java tests
-     #   run: |
-     #      cd selenium/java
-     #      export TESTCONTAINERS_RYUK_DISABLED=true 
-     #      mvn test-compile
-     #      mvn clean test
-     #      cp timings.csv selenium-java.csv
+     - name: Run Selenium Java tests
+       run: |
+          cd selenium/java
+          export TESTCONTAINERS_RYUK_DISABLED=true 
+          mvn test-compile
+          mvn clean test
+          cp timings.csv selenium-java.csv
       
      - name: check Docker-containers
        if: always()
