@@ -50,33 +50,6 @@ jobs:
           apt-get update
           apt-get install -y curl tar docker.io
           
-     - name: Start Selenium container (background mode)
-       run: |
-          echo "Starting Selenium container..."
-          docker run -d --name selenium_test \
-            --shm-size=2g -p 4444:4444 selenium/standalone-chrome:126.0
-          sleep 5  
-          docker ps -a
-
-     - name: Wait for Selenium to be ready
-       run: |
-        echo "Waiting for Selenium to be ready..."
-        for i in {1..10}; do
-          STATUS_CODE=$(curl -o /dev/null -s -w "%{http_code}" http://localhost:4444/status)
-          if [ "$STATUS_CODE" -eq 200 ]; then
-          echo "✅ Selenium is ready!"
-          exit 0
-        fi
-          echo "⌛ Selenium not ready yet... (Status: $STATUS_CODE)"
-          sleep 3
-          done
-        echo "❌ Selenium failed to start!"
-        docker logs selenium_test --tail 50
-        exit 1
-
-     - name: Check Selenium logs (timeout 10s)
-       run: timeout 10s docker logs selenium_test || true
-
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
@@ -84,17 +57,7 @@ jobs:
           mvn test-compile
           mvn clean test
           cp timings.csv selenium-java.csv
-      
-     - name: check Docker-containers
-       if: always()
-       run: docker ps -a
-       
-     - name: remove Docker-container
-       if: always()
-       run: |
-        docker stop selenium_test
-        docker rm selenium_test 
-      
+     
      - name: Upload Selenium Java results
        uses: actions/upload-artifact@v4
        with:
