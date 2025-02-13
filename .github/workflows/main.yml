@@ -62,7 +62,6 @@ jobs:
        run: |
           docker exec selenium_test java -jar /opt/selenium/selenium-server.jar standalone
           curl -v http://localhost:4444/status
-          timeout 10s docker logs selenium_test || true
 
      - name: Run Selenium Java tests
        run: |
