@@ -50,18 +50,28 @@ jobs:
           apt-get update
           apt-get install -y curl tar docker.io
           
-     - name: Start Selenium container (debug mode)
+     - name: Start Selenium container (background mode)
        run: |
           echo "Starting Selenium container..."
           docker run -d --name selenium_test \
-            --shm-size=2g -p 4444:4444 \
-            --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "sleep infinity"
+            --shm-size=2g -p 4444:4444 selenium/standalone-chrome:126.0
+          sleep 5  
           docker ps -a
 
-     - name: Check Selenium container logs
+     - name: Wait for Selenium to be ready
        run: |
-          docker exec selenium_test java -jar /opt/selenium/selenium-server.jar standalone
-          curl -v http://localhost:4444/status
+          echo "Waiting for Selenium..."
+          for i in {1..10}; do
+            curl -s http://localhost:4444/status && exit 0
+            echo "Selenium not ready yet..."
+            sleep 2
+          done
+          echo "Selenium failed to start"
+          docker logs selenium_test --tail 50
+          exit 1
+
+     - name: Check Selenium logs (timeout 10s)
+       run: timeout 10s docker logs selenium_test || true
 
      - name: Run Selenium Java tests
        run: |
