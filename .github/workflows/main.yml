@@ -50,12 +50,6 @@ jobs:
           apt-get update
           apt-get install -y curl tar docker.io
           
-     - name: remove Docker-container
-       if: always()
-       run: |
-          docker stop selenium_test
-          docker rm selenium_test 
-          
      - name: Start Selenium container (debug mode)
        run: |
           echo "Starting Selenium container..."
