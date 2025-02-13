@@ -54,7 +54,7 @@ jobs:
        run: |
           docker run --rm --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "java -version"
           docker run --rm --entrypoint /bin/sh selenium/standalone-chrome:126.0 -c "ls -lah /opt/selenium/"
-
+          
      - name: Start Selenium container (debug mode)
        run: |
           echo "Starting Selenium container..."
@@ -64,7 +64,10 @@ jobs:
           docker ps -a
 
      - name: Check Selenium container logs
-       run: docker logs selenium_test || true
+       run: |
+          docker exec selenium_test java -jar /opt/selenium/selenium-server.jar standalone
+          curl -v http://localhost:4444/status
+          docker logs selenium_test || true
 
      # - name: Run Selenium Java tests
      #   run: |
