@@ -68,6 +68,9 @@ jobs:
           echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
           echo "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal" >> $GITHUB_ENV
 
+     - name: Disable Ryuk
+       run: echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
+
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
