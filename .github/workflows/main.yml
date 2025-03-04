@@ -71,6 +71,8 @@ jobs:
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
+          export TESTCONTAINERS_RYUK_DISABLED=true
+          echo $TESTCONTAINERS_RYUK_DISABLED
           docker run --rm \
           -v /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich:/home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich \
           -w /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/selenium/java \
