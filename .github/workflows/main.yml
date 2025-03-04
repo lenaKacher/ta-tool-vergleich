@@ -73,24 +73,10 @@ jobs:
           echo "Listing all containers:"
           docker ps -a
 
-          echo "Checking for Selenium container..."
-          SELENIUM_CONTAINER_ID=$(docker ps -aqf "ancestor=selenium/standalone-chrome:126.0")
-
-          if [ -n "$SELENIUM_CONTAINER_ID" ]; then
-            echo "Selenium container found: $SELENIUM_CONTAINER_ID"
-            echo "Selenium container logs:"
-            docker logs "$SELENIUM_CONTAINER_ID"
-          else
-            echo "❌ Selenium container was not created or stopped immediately."
-          fi
-
-    
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
-          # export TESTCONTAINERS_RYUK_DISABLED=true 
-          mvn test-compile
-          mvn clean test
+          docker run -it --rm -v  ${{ github.workspace }}: ${{ github.workspace }} -w  ${{ github.workspace }} -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test
           cp timings.csv selenium-java.csv
      
      - name: Upload Selenium Java results
