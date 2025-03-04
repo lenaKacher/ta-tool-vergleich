@@ -68,8 +68,22 @@ jobs:
           echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
           echo "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal" >> $GITHUB_ENV
 
-     - name: Check container logs if it fails
-       run: docker ps -a
+     - name: Debug containers
+       run: |
+          echo "Listing all containers:"
+          docker ps -a
+
+          echo "Checking for Selenium container..."
+          SELENIUM_CONTAINER_ID=$(docker ps -aqf "ancestor=selenium/standalone-chrome:126.0")
+
+          if [ -n "$SELENIUM_CONTAINER_ID" ]; then
+            echo "Selenium container found: $SELENIUM_CONTAINER_ID"
+            echo "Selenium container logs:"
+            docker logs "$SELENIUM_CONTAINER_ID"
+          else
+            echo "❌ Selenium container was not created or stopped immediately."
+          fi
+
     
      - name: Run Selenium Java tests
        run: |
