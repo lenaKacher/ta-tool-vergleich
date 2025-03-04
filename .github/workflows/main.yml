@@ -68,12 +68,10 @@ jobs:
           echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
           echo "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal" >> $GITHUB_ENV
 
-     - name: Disable Ryuk
-       run: echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
-
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
+          export TESTCONTAINERS_RYUK_DISABLED=true 
           docker run --rm \
           -v /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich:/home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich \
           -w /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/selenium/java \
