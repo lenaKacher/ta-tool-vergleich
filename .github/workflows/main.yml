@@ -76,7 +76,7 @@ jobs:
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
-          docker run -it --rm -v  ${{ github.workspace }}: ${{ github.workspace }} -w  ${{ github.workspace }} -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test
+          docker run -it --rm -v  ${{ github.workspace }}:${{ github.workspace }} -w  ${{ github.workspace }} -v /var/run/docker.sock:/var/run/docker.sock maven:3 mvn test
           cp timings.csv selenium-java.csv
      
      - name: Upload Selenium Java results
