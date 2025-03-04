@@ -45,7 +45,9 @@ public class SeleniumBuyProductsTest {
     static long beforeBrowserStartTS =0;
     static long beforeTestStartTS = 0;
 
-
+    static {
+        System.setProperty("testcontainers.ryuk.disabled", "true");
+    }
 
     @ClassRule
     public static BrowserWebDriverContainer chrome =
