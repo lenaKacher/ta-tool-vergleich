@@ -63,7 +63,7 @@ jobs:
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
-          # export TESTCONTAINERS_RYUK_DISABLED=true 
+          export TESTCONTAINERS_RYUK_DISABLED=true 
           mvn test-compile
           mvn clean test
           cp timings.csv selenium-java.csv
