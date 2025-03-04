@@ -29,15 +29,16 @@ jobs:
   selenium_java:
     runs-on: self-hosted
     if: inputs.RUN_SELENIUM_JAVA
-    services:
-      docker:
-        image: docker:dind
-        options: --privileged --shm-size=2g
-        volumes:
-          - /var/run/docker.sock:/var/run/docker.sock
+
     container:
       image: ubuntu:latest
-      
+      volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+          - ${{ github.workspace }}:${{ github.workspace }}
+      options: 
+          --workdir=${{ github.workspace }} 
+          --privileged --shm-size=2g
+
     steps:
      - name: Checkout code
        uses: actions/checkout@v3
@@ -60,13 +61,20 @@ jobs:
           tar -xzf maven.tar.gz -C /opt/
           ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
 
+     - name: Set up Testcontainers environment
+       run: |
+          echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
+          echo "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock" >> $GITHUB_ENV
+          echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
+          echo "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal" >> $GITHUB_ENV
+
      - name: Check container logs if it fails
        run: docker ps -a
     
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
-          export TESTCONTAINERS_RYUK_DISABLED=true 
+          # export TESTCONTAINERS_RYUK_DISABLED=true 
           mvn test-compile
           mvn clean test
           cp timings.csv selenium-java.csv
