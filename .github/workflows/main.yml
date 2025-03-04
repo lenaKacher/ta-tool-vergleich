@@ -75,7 +75,7 @@ jobs:
           -v /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich:/home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich \
           -w /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/selenium/java \
           -v /var/run/docker.sock:/var/run/docker.sock \
-          maven:3 mvn test
+          maven:3 mvn test -Dtestcontainers.ryuk.disabled=true
           cp timings.csv selenium-java.csv
      
      - name: Upload Selenium Java results
