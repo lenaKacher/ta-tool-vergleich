@@ -32,9 +32,9 @@ jobs:
 
     container:
       image: ubuntu:latest
-      volumes:
-          - /var/run/docker.sock:/var/run/docker.sock
-          - ${{ github.workspace }}:${{ github.workspace }}
+      # volumes:
+      #     - /var/run/docker.sock:/var/run/docker.sock
+      #     - ${{ github.workspace }}:${{ github.workspace }}
       options: 
           --workdir=${{ github.workspace }} 
           --privileged --shm-size=2g
@@ -68,11 +68,14 @@ jobs:
           echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
           echo "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal" >> $GITHUB_ENV
 
+     - name: disable Ryuk
+       run: |
+          export TESTCONTAINERS_RYUK_DISABLED=true
+          echo $TESTCONTAINERS_RYUK_DISABLED
+
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
-          export TESTCONTAINERS_RYUK_DISABLED=true
-          echo $TESTCONTAINERS_RYUK_DISABLED
           docker run --rm \
           -v /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich:/home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich \
           -w /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/selenium/java \
