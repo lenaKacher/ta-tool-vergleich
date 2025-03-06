@@ -39,9 +39,6 @@ jobs:
           image: ubuntu:latest
           
     steps:
-     - name: Check if file is locked
-       run: sudo lsof /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/.devcontainer/devcontainer.json || true       
-     
      - name: Checkout code
        uses: actions/checkout@v3
 
