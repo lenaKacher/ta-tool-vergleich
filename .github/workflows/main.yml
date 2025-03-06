@@ -40,7 +40,7 @@ jobs:
           
     steps:
      - name: Fix file ownership
-       run: sudo chown -R $(whoami) /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich
+       run: sudo -n chown -R $(whoami) /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich
        
      - name: Checkout code
        uses: actions/checkout@v3
