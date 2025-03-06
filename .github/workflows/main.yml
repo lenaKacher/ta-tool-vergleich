@@ -39,12 +39,9 @@ jobs:
           image: ubuntu:latest
           
     steps:
-     - name: Check Runner User
-       run: whoami
-
-     - name: Check file permissions
-       run: ls -lah /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/.devcontainer/
-
+     - name: Fix file ownership
+       run: sudo chown -R $(whoami) /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich
+       
      - name: Checkout code
        uses: actions/checkout@v3
 
