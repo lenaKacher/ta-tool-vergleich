@@ -75,7 +75,7 @@ jobs:
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
-          maven:3 mvn test -Dtestcontainers.ryuk.disabled=true
+          mvn test -Dtestcontainers.ryuk.disabled=true
           cp timings.csv selenium-java.csv
      
      - name: Upload Selenium Java results
