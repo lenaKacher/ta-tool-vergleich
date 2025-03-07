@@ -48,12 +48,8 @@ jobs:
          distribution: 'temurin'
          java-version: '17'
 
-     - name: Update system packages
-       run: |
-        sudo apt-get update
-        sudo apt-get upgrade -y
-        sudo apt-get dist-upgrade -y
-        sudo apt-get autoremove -y  
+     - name: Check held packages
+       run: dpkg --get-selections | grep hold || echo "No held packages"
 
      - name: Install dependencies
        run: apt-get install -y curl tar docker.io
