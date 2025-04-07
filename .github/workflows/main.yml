@@ -232,17 +232,17 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      # - name: Install dependencies
-      #   run: |
-      #     apt-get update
-      #     apt-get install -y curl tar
+      - name: Install dependencies
+        run: |
+          apt-get update
+          apt-get install -y curl tar
           
-      # - name: Install Maven
-      #   run: |
-      #     MAVEN_VERSION=3.8.8
-      #     curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
-      #     tar -xzf maven.tar.gz -C /opt/
-      #     ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
+      - name: Install Maven
+        run: |
+          MAVEN_VERSION=3.8.8
+          curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
+          tar -xzf maven.tar.gz -C /opt/
+          ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
       - name: Run Playwright Java Tests
         if: inputs.RUN_PLAYWRIGHT_JAVA
         run: |
