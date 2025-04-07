@@ -166,14 +166,14 @@ jobs:
   playwright-javaScript:
     runs-on: self-hosted
     if: inputs.RUN_PLAYWRIGHT_JS
-    # services:
-    #   docker:
-    #     image: docker:dind
-    #     options: --privileged --shm-size=2g
-    #     volumes:
-    #       - /var/run/docker.sock:/var/run/docker.sock
-    # container:
-    #   image: ubuntu:latest
+    services:
+      docker:
+        image: docker:dind
+        options: --privileged --shm-size=2g
+        volumes:
+          - /var/run/docker.sock:/var/run/docker.sock
+    container:
+      image: ubuntu:latest
 
     steps:
       - name: Checkout code
@@ -195,10 +195,6 @@ jobs:
               npm run test || true
           done           
           cp timings.csv playwright-js.csv
-      - name: Debug timings.csv and playwright-js.csv
-        run: |
-          cd playwright/js
-          ls -la
    
       - name: Copy timings.csv to playwright-js.csv
         uses: actions/upload-artifact@v4
@@ -236,17 +232,17 @@ jobs:
           distribution: 'temurin'
           java-version: '17'
 
-      - name: Install dependencies
-        run: |
-          apt-get update
-          apt-get install -y curl tar
+      # - name: Install dependencies
+      #   run: |
+      #     apt-get update
+      #     apt-get install -y curl tar
           
-      - name: Install Maven
-        run: |
-          MAVEN_VERSION=3.8.8
-          curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
-          tar -xzf maven.tar.gz -C /opt/
-          ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
+      # - name: Install Maven
+      #   run: |
+      #     MAVEN_VERSION=3.8.8
+      #     curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
+      #     tar -xzf maven.tar.gz -C /opt/
+      #     ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
       - name: Run Playwright Java Tests
         if: inputs.RUN_PLAYWRIGHT_JAVA
         run: |
