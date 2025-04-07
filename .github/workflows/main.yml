@@ -40,13 +40,11 @@ jobs:
           apt-get install -y openjdk-17-jdk maven fonts-liberation libnss3 libatk-bridge2.0-0 libgtk-3-0 \
             libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libasound2t64 libxshmfence1 \
             libpangocairo-1.0-0 libpango-1.0-0
-          # wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          # apt-get install -y ./google-chrome-stable_current_amd64.deb || apt --fix-broken install -y
 
-     - name: Set up Java env
-       run: |
-          echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))" >> $GITHUB_ENV
-          echo "PATH=$PATH:$JAVA_HOME/bin" >> $GITHUB_ENV
+     # - name: Set up Java env
+     #   run: |
+     #      echo "JAVA_HOME=$(dirname $(dirname $(readlink -f $(which javac))))" >> $GITHUB_ENV
+     #      echo "PATH=$PATH:$JAVA_HOME/bin" >> $GITHUB_ENV
           
      - name: Checkout code
        uses: actions/checkout@v3
