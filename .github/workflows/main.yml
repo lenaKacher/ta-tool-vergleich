@@ -308,6 +308,8 @@ jobs:
         run: |
           cd cypress/js
           npm ci
+          export XDG_RUNTIME_DIR=/tmp/xdg
+          mkdir -p $XDG_RUNTIME_DIR
           for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
               npm run test || true
           done           
