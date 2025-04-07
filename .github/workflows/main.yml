@@ -51,13 +51,13 @@ jobs:
           export TESTCONTAINERS_RYUK_DISABLED=true
           echo $TESTCONTAINERS_RYUK_DISABLED
           
-     - name: Check Docker Connectivity
-       run: docker pull selenium/standalone-chrome:latest
+     # - name: Check Docker Connectivity
+     #   run: docker pull selenium/standalone-chrome:latest
 
-     - name: Docker Info
-       run: |
-            docker version
-            docker ps
+     # - name: Docker Info
+     #   run: |
+     #        docker version
+     #        docker ps
        
      - name: Run Selenium Java tests
        run: |
@@ -95,11 +95,11 @@ jobs:
          distribution: 'temurin'
          java-version: '17'
 
-     - name: Set up Testcontainers environment
-       run: |
-          echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
-          echo "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock" >> $GITHUB_ENV
-          echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
+     # - name: Set up Testcontainers environment
+     #   run: |
+     #      echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
+     #      echo "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock" >> $GITHUB_ENV
+     #      echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
 
      - name: Run Selenium Java Page Object Pattern tests
        run: |
@@ -119,6 +119,13 @@ jobs:
        with:
           name: selenium-java-pop.csv
           path: selenium/java_PageObjectPattern/selenium-java-pop.csv
+          if-no-files-found: ignore
+
+     - name: Upload screenshots
+       uses: actions/upload-artifact@v4
+       with:
+          name: selenium-screenshots
+          path: selenium/java_PageObjectPattern/screenshots/
           if-no-files-found: ignore
 
   selenium_js:
@@ -148,18 +155,25 @@ jobs:
           name: selenium-js-results
           path: selenium/js/selenium-js.csv
           if-no-files-found: ignore
+
+     - name: Upload screenshots
+       uses: actions/upload-artifact@v4
+       with:
+          name: selenium-screenshots
+          path: selenium/js/screenshots/
+          if-no-files-found: ignore
           
   playwright-javaScript:
     runs-on: self-hosted
     if: inputs.RUN_PLAYWRIGHT_JS
-    services:
-      docker:
-        image: docker:dind
-        options: --privileged --shm-size=2g
-        volumes:
-          - /var/run/docker.sock:/var/run/docker.sock
-    container:
-      image: ubuntu:latest
+    # services:
+    #   docker:
+    #     image: docker:dind
+    #     options: --privileged --shm-size=2g
+    #     volumes:
+    #       - /var/run/docker.sock:/var/run/docker.sock
+    # container:
+    #   image: ubuntu:latest
 
     steps:
       - name: Checkout code
@@ -192,7 +206,14 @@ jobs:
           name: playwright-js.csv
           path: playwright/js/playwright-js.csv
           if-no-files-found: ignore
-
+          
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+           name: selenium-screenshots
+           path: playwright/js/screenshots/
+           if-no-files-found: ignore
+           
   playwright-java:
     runs-on: self-hosted
     if: inputs.RUN_PLAYWRIGHT_JAVA
