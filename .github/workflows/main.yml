@@ -69,6 +69,8 @@ jobs:
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
+          for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
+             mvn clean test || true
           cp timings.csv selenium-java.csv
      
      - name: Upload Selenium Java results
