@@ -124,7 +124,7 @@ jobs:
      - name: Upload screenshots
        uses: actions/upload-artifact@v4
        with:
-          name: selenium-screenshots
+          name: selenium-java-pop-screenshots
           path: selenium/java_PageObjectPattern/screenshots/
           if-no-files-found: ignore
 
@@ -159,7 +159,7 @@ jobs:
      - name: Upload screenshots
        uses: actions/upload-artifact@v4
        with:
-          name: selenium-screenshots
+          name: selenium-js-screenshots
           path: selenium/js/screenshots/
           if-no-files-found: ignore
           
@@ -206,7 +206,7 @@ jobs:
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
         with:
-           name: selenium-screenshots
+           name: playwright-js-screenshots
            path: playwright/js/screenshots/
            if-no-files-found: ignore
            
@@ -270,7 +270,7 @@ jobs:
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
         with:
-           name: selenium-screenshots
+           name: playwright-screenshots
            path: playwright/java/screenshots/
            if-no-files-found: ignore
 
@@ -310,6 +310,7 @@ jobs:
               npm run test || true
           done           
           cp timings.csv playwright-js.csv
+          
       - name: Debug timings.csv and cypress-js.csv
         run: |
           cd cypress/js
@@ -326,5 +327,5 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: cypress-screenshots
-          path: ta-tool-vergleich/cypress/js/cypress/screenshots/
+          path: cypress/js/screenshots/
           if-no-files-found: ignore
