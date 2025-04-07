@@ -29,8 +29,6 @@ jobs:
   selenium_java:
     runs-on: self-hosted
     if: inputs.RUN_SELENIUM_JAVA
-    container:
-        image: ubuntu:latest
           
     steps:
      - name: Checkout code
