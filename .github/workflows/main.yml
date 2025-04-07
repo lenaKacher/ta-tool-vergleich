@@ -40,11 +40,11 @@ jobs:
          distribution: 'temurin'
          java-version: '17'
 
-     - name: Set up Testcontainers environment
-       run: |
-          echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
-          echo "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock" >> $GITHUB_ENV
-          echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
+     # - name: Set up Testcontainers environment
+     #   run: |
+     #      echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
+     #      echo "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock" >> $GITHUB_ENV
+     #      echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
           
      - name: disable Ryuk
        run: |
