@@ -40,13 +40,6 @@ jobs:
          distribution: 'temurin'
          java-version: '17'
 
-     # - name: Install Maven
-     #   run: |
-     #      MAVEN_VERSION=3.8.8
-     #      curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
-     #      tar -xzf maven.tar.gz -C /opt/
-     #      ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
-
      - name: Set up Testcontainers environment
        run: |
           echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
@@ -81,59 +74,44 @@ jobs:
          path: selenium/java/selenium-java.csv
          if-no-files-found: ignore
 
+     - name: Upload screenshots
+       uses: actions/upload-artifact@v4
+       with:
+          name: selenium-screenshots
+          path: selenium/java/screenshots/
+          if-no-files-found: ignore
+
   selenium_pop:
     runs-on: self-hosted
     if: inputs.RUN_SELENIUM_POP
-    services:
-      docker:
-        image: docker:dind
-        options: --privileged --shm-size=2g
-    container:
-      image: ubuntu:latest
-      
+          
     steps:
-     - name: Install dependencies
-       run: |
-          apt-get update
-          apt-get install -y curl tar docker.io
-      
-     - name: Verify Docker in container
-       run: docker ps -a
-      
      - name: Checkout code
        uses: actions/checkout@v3
-
+      
      - name: Set up Java
        uses: actions/setup-java@v3
        with:
-          distribution: 'temurin'
-          java-version: '17'
+         distribution: 'temurin'
+         java-version: '17'
 
-     - name: Install dependencies
+     - name: Set up Testcontainers environment
        run: |
-          apt-get update
-          apt-get install -y curl tar
-
-     - name: Install Maven
-       run: |
-          MAVEN_VERSION=3.8.8
-          curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
-          tar -xzf maven.tar.gz -C /opt/
-          ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
+          echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
+          echo "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock" >> $GITHUB_ENV
+          echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
 
      - name: Run Selenium Java Page Object Pattern tests
        run: |
           cd selenium/java_PageObjectPattern
-          docker run -v /var/run/docker.sock:/var/run/docker.sock docker:latest docker ps
-          docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace maven:3 mvn test-compile
              for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
              mvn clean test || true
           done
-          cp timings.csv selenium-java.csv
+          cp timings.csv selenium-java_pop.csv
           
-     - name: Debug timings.csv and selenium-java.csv
+     - name: Debug timings.csv and selenium-java_pop.csv
        run: |
-          cd selenium/java
+          cd selenium/java_pop
           ls -la
    
      - name: Copy timings.csv to selenium-java-pop.csv
@@ -146,23 +124,8 @@ jobs:
   selenium_js:
     runs-on: self-hosted
     if: inputs.RUN_SELENIUM_JS
-    services:
-      docker:
-        image: docker:dind
-        options: --shm-size=2g
-    container:
-      image: ubuntu:latest
-      options: --privileged 
       
     steps:
-     - name: Install dependencies
-       run: |
-          apt-get update
-          apt-get install -y curl tar docker.io
-      
-     - name: Verify Docker in container
-       run: docker ps -a
-      
      - name: Checkout code
        uses: actions/checkout@v3
 
@@ -175,8 +138,6 @@ jobs:
        run: |
           cd selenium/js
           npm ci
-          docker run -v /var/run/docker.sock:/var/run/docker.sock docker:latest docker ps
-          docker run -i --rm -v $PWD/selenium/java:/workspace -w /workspace maven:3 mvn test-compile
              for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
              mvn clean test || true
           done
