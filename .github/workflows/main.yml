@@ -29,14 +29,8 @@ jobs:
   selenium_java:
     runs-on: self-hosted
     if: inputs.RUN_SELENIUM_JAVA
-    services:
-      docker:
-        image: docker:dind
-        options: --privileged --shm-size=2g
-        volumes:
-          - /var/run/docker.sock:/var/run/docker.sock:ro  
-      container:
-          image: ubuntu:latest
+    container:
+        image: ubuntu:latest
           
     steps:
      - name: Checkout code
@@ -51,7 +45,7 @@ jobs:
      - name: Install Latest Containerd and Docker
        run: |
          sudo apt-get update
-         sudo apt-get install -y containerd.io docker-ce docker-ce-cli
+         sudo apt-get install -y docker.io 
 
      # - name: Install Maven
      #   run: |
@@ -65,8 +59,7 @@ jobs:
           echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
           echo "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock" >> $GITHUB_ENV
           echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
-          echo "TESTCONTAINERS_HOST_OVERRIDE=host.docker.internal" >> $GITHUB_ENV
-
+          
      - name: disable Ryuk
        run: |
           export TESTCONTAINERS_RYUK_DISABLED=true
@@ -74,11 +67,15 @@ jobs:
           
      - name: Check Docker Connectivity
        run: docker pull selenium/standalone-chrome:latest
+
+     - name: Docker Info
+       run: |
+            docker version
+            docker ps
        
      - name: Run Selenium Java tests
        run: |
           cd selenium/java
-          mvn test -Dtestcontainers.ryuk.disabled=true
           cp timings.csv selenium-java.csv
      
      - name: Upload Selenium Java results
