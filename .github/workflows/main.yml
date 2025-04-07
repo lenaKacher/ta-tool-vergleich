@@ -40,8 +40,8 @@ jobs:
           apt-get install -y openjdk-17-jdk maven fonts-liberation libnss3 libatk-bridge2.0-0 libgtk-3-0 \
             libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libasound2t64 libxshmfence1 \
             libpangocairo-1.0-0 libpango-1.0-0
-          wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
-          apt-get install -y ./google-chrome-stable_current_amd64.deb || apt --fix-broken install -y
+          # wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
+          # apt-get install -y ./google-chrome-stable_current_amd64.deb || apt --fix-broken install -y
 
      - name: Set up Java env
        run: |
@@ -56,25 +56,6 @@ jobs:
        with:
          distribution: 'temurin'
          java-version: '17'
-
-     # - name: Set up Testcontainers environment
-     #   run: |
-     #      echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
-     #      echo "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock" >> $GITHUB_ENV
-     #      echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
-          
-     # - name: disable Ryuk
-     #   run: |
-     #      export TESTCONTAINERS_RYUK_DISABLED=true
-     #      echo $TESTCONTAINERS_RYUK_DISABLED
-          
-     # - name: Check Docker Connectivity
-     #   run: docker pull selenium/standalone-chrome:latest
-
-     # - name: Docker Info
-     #   run: |
-     #        docker version
-     #        docker ps
        
      - name: Run Selenium Java tests
        run: |
@@ -111,12 +92,6 @@ jobs:
        with:
          distribution: 'temurin'
          java-version: '17'
-
-     # - name: Set up Testcontainers environment
-     #   run: |
-     #      echo "DOCKER_HOST=unix:///var/run/docker.sock" >> $GITHUB_ENV
-     #      echo "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock" >> $GITHUB_ENV
-     #      echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
 
      - name: Run Selenium Java Page Object Pattern tests
        run: |
