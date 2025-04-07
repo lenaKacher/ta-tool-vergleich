@@ -107,9 +107,9 @@ jobs:
              for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
              mvn clean test || true
           done
-          cp timings.csv selenium-java_pop.csv
+          cp timings.csv selenium-java-pop.csv
           
-     - name: Debug timings.csv and selenium-java_pop.csv
+     - name: Debug timings.csv and selenium-java-pop.csv
        run: |
           cd selenium/java_pop
           ls -la
