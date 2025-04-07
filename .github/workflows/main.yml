@@ -121,7 +121,7 @@ jobs:
           
      - name: Debug timings.csv and selenium-java-pop.csv
        run: |
-          cd selenium/java_pop
+          cd selenium/java_PageObjectPattern
           ls -la
    
      - name: Copy timings.csv to selenium-java-pop.csv
