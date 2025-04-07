@@ -31,11 +31,6 @@ jobs:
     if: inputs.RUN_SELENIUM_JAVA
           
     steps:
-     - name: Clean previous run (safe rm)
-       run: |
-          echo "Cleaning previous project state..."
-          sudo find /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/ -mindepth 1 -delete || true
-          
      - name: Checkout code
        uses: actions/checkout@v3
 
@@ -91,11 +86,6 @@ jobs:
     if: inputs.RUN_SELENIUM_POP
           
     steps:
-     - name: Clean previous run (safe rm)
-       run: |
-          echo "Cleaning previous project state..."
-          sudo find /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/ -mindepth 1 -delete || true
-    
      - name: Checkout code
        uses: actions/checkout@v3
       
@@ -136,11 +126,6 @@ jobs:
     if: inputs.RUN_SELENIUM_JS
       
     steps:
-     - name: Clean previous run (safe rm)
-       run: |
-          echo "Cleaning previous project state..."
-          sudo find /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/ -mindepth 1 -delete || true
-
      - name: Checkout code
        uses: actions/checkout@v3
 
@@ -177,11 +162,6 @@ jobs:
       image: ubuntu:latest
 
     steps:
-      - name: Clean previous run (safe rm)
-        run: |
-          echo "Cleaning previous project state..."
-          sudo find /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/ -mindepth 1 -delete || true
-
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -226,11 +206,6 @@ jobs:
       image: ubuntu:latest
 
     steps:
-      - name: Clean previous run (safe rm)
-        run: |
-          echo "Cleaning previous project state..."
-          sudo find /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/ -mindepth 1 -delete || true
-
       - name: Checkout code
         uses: actions/checkout@v3
 
@@ -286,11 +261,6 @@ jobs:
       image: ubuntu:latest
 
     steps:
-      - name: Clean previous run (safe rm)
-        run: |
-          echo "Cleaning previous project state..."
-          sudo find /home/proficom/actions-runner/_work/ta-tool-vergleich/ta-tool-vergleich/ -mindepth 1 -delete || true
-
       - name: Checkout code
         uses: actions/checkout@v3
 
