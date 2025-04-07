@@ -243,6 +243,7 @@ jobs:
           curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
           tar -xzf maven.tar.gz -C /opt/
           ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
+          
       - name: Run Playwright Java Tests
         if: inputs.RUN_PLAYWRIGHT_JAVA
         run: |
@@ -264,6 +265,13 @@ jobs:
           name: playwright-java.csv
           path: playwright/java/playwright-java.csv
           if-no-files-found: ignore
+
+      - name: Upload screenshots
+        uses: actions/upload-artifact@v4
+        with:
+           name: selenium-screenshots
+           path: selenium/java/screenshots/
+           if-no-files-found: ignore
 
   cypress-js:
     runs-on: self-hosted
