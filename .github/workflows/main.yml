@@ -134,19 +134,12 @@ jobs:
        with:
           node-version: '18'
 
-     - name: Install Maven
-       run: |
-          MAVEN_VERSION=3.8.8
-          curl -fsSL https://downloads.apache.org/maven/maven-3/3.8.8/binaries/apache-maven-3.8.8-bin.tar.gz -o maven.tar.gz
-          tar -xzf maven.tar.gz -C /opt/
-          ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
-
      - name: Run Selenium JavaScript tests
        run: |
           cd selenium/js
           npm ci
              for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-             mvn clean test || true
+             npm run test || true
           done
           cp timings.csv selenium-js.csv
      - name: Upload Selenium JS results
