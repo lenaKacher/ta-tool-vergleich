@@ -46,10 +46,10 @@ jobs:
      #      echo "TESTCONTAINERS_DOCKER_SOCKET_OVERRIDE=/var/run/docker.sock" >> $GITHUB_ENV
      #      echo "TESTCONTAINERS_RYUK_DISABLED=true" >> $GITHUB_ENV
           
-     - name: disable Ryuk
-       run: |
-          export TESTCONTAINERS_RYUK_DISABLED=true
-          echo $TESTCONTAINERS_RYUK_DISABLED
+     # - name: disable Ryuk
+     #   run: |
+     #      export TESTCONTAINERS_RYUK_DISABLED=true
+     #      echo $TESTCONTAINERS_RYUK_DISABLED
           
      # - name: Check Docker Connectivity
      #   run: docker pull selenium/standalone-chrome:latest
