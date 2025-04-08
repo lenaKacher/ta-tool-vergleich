@@ -262,7 +262,6 @@ describe('AOS-TestScript', function() {
 
 
 function saveScreenShot(image, fileName) {
-  const image = await driver.takeScreenshot();
   require('fs').writeFileSync(fileName, image, 'base64')
 }
 
