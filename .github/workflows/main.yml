@@ -139,13 +139,14 @@ jobs:
      - name: Run Selenium JavaScript tests
        run: |
           cd selenium/js
+          mkdir -p ./tmp
+          export TESTCONTAINERS_TMPDIR=$(pwd)/tmp
+          export TAKE_SCREENSHOTS=true
           npm ci
              for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
              npm run test || true
           done
           cp timings.csv selenium-js.csv
-       env:
-          TAKE_SCREENSHOTS: 'true'
           
      - name: Upload Selenium JS results
        uses: actions/upload-artifact@v4
