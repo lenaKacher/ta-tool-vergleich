@@ -57,6 +57,11 @@ jobs:
              mvn clean test -DTAKE_SCREENSHOTS=true || true
              done
           cp timings.csv selenium-java.csv
+
+     - name: Debug timings.csv and selenium-java.csv
+       run: |
+          cd selenium/java
+          ls -la
      
      - name: Upload Selenium Java results
        uses: actions/upload-artifact@v4
@@ -149,6 +154,11 @@ jobs:
              npm run test || true
           done
           cp timings.csv selenium-js.csv
+          
+     - name: Debug timings.csv and selenium-js.csv
+       run: |
+          cd selenium/js
+          ls -la
           
      - name: Upload Selenium JS results
        uses: actions/upload-artifact@v4
