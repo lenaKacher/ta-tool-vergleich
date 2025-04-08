@@ -143,7 +143,7 @@ jobs:
           cd selenium/js
           mkdir -p ./tmp
           export TESTCONTAINERS_TMPDIR=$(pwd)/tmp
-          export TAKE_SCREENSHOTS=true
+          export TAKE_SCREENSHOT=true
           npm ci
              for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
              npm run test || true
