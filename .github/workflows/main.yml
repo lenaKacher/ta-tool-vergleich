@@ -54,7 +54,7 @@ jobs:
        run: |
           cd selenium/java
           for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-             mvn clean test || true
+             mvn clean test -DTAKE_SCREENSHOTS=true || true
              done
           cp timings.csv selenium-java.csv
      
