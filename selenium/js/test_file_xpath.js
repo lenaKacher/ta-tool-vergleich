@@ -3,6 +3,7 @@
 const { SeleniumContainer } = require("@testcontainers/selenium");
 const assert = require('chai')
 const { By, Builder, Select, until, Key} = require("selenium-webdriver");
+const fs = require('fs');
 
 
 //set test case specific variables
@@ -257,9 +258,7 @@ describe('AOS-TestScript', function() {
 })
 afterEach(async function() {
   if (this.currentTest.state === 'failed' && TAKE_SCREENSHOT && driver) {
-    const fs = require('fs');
     if (!fs.existsSync("screenshots")) fs.mkdirSync("screenshots");
-
     const name = this.currentTest.title.replace(/\s+/g, "_") + ".png";
     const image = await driver.takeScreenshot();
     fs.writeFileSync(`screenshots/${name}`, image, 'base64');
