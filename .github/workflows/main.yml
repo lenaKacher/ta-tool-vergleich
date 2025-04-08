@@ -75,8 +75,18 @@ jobs:
   selenium_pop:
     runs-on: self-hosted
     if: inputs.RUN_SELENIUM_POP
+    container:
+      image: ubuntu:latest
           
     steps:
+     - name: Install Dependencies (Java, Maven, Chrome)
+       run: |
+          apt-get update
+          apt-get install -y wget curl unzip gnupg git
+          apt-get install -y openjdk-17-jdk maven fonts-liberation libnss3 libatk-bridge2.0-0 libgtk-3-0 \
+            libx11-xcb1 libxcomposite1 libxdamage1 libxrandr2 libgbm1 libasound2t64 libxshmfence1 \
+            libpangocairo-1.0-0 libpango-1.0-0
+            
      - name: Checkout code
        uses: actions/checkout@v3
       
