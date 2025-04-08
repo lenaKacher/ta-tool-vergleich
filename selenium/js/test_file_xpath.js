@@ -253,13 +253,19 @@ describe('AOS-TestScript', function() {
     console.log(`Tracking Number: ${await driver.findElement(By.xpath("//label[@id='trackingNumberLabel']")).getText()}`)
     console.log(`Tracking Number: ${await driver.findElement(By.xpath("//label[@id='orderNumberLabel']")).getText()}`)
   })
-
-
-
-
-
+  
 })
+afterEach(async function() {
+  if (this.currentTest.state === 'failed' && TAKE_SCREENSHOT && driver) {
+    const fs = require('fs');
+    if (!fs.existsSync("screenshots")) fs.mkdirSync("screenshots");
 
+    const name = this.currentTest.title.replace(/\s+/g, "_") + ".png";
+    const image = await driver.takeScreenshot();
+    fs.writeFileSync(`screenshots/${name}`, image, 'base64');
+    console.log(`[Screenshot] Saved: screenshots/${name}`);
+  }
+});
 
 function saveScreenShot(image, fileName) {
   require('fs').writeFileSync(fileName, image, 'base64')
