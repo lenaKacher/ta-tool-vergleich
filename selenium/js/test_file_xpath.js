@@ -268,7 +268,8 @@ afterEach(async function() {
 });
 
 function saveScreenShot(image, fileName) {
-  require('fs').writeFileSync(fileName, image, 'base64')
+  if (!fs.existsSync("screenshots")) fs.mkdirSync("screenshots");
+  fs.writeFileSync(`screenshots/${fileName}`, image, 'base64')
 }
 
 function formatDate(date, format) {
