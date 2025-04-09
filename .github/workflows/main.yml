@@ -213,12 +213,17 @@ jobs:
           name: playwright-js.csv
           path: playwright/js/playwright-js.csv
           if-no-files-found: ignore
+
+      - name: Debug timings.csv and selenium-java.csv
+        run: |
+          cd playwright/js
+          ls -la
           
       - name: Upload screenshots
         uses: actions/upload-artifact@v4
         with:
            name: playwright-js-screenshots
-           path: playwright/js/screenshots/
+           path: playwright-report/test-results/**/screenshot-after.png
            if-no-files-found: ignore
            
   playwright-java:
