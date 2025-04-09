@@ -40,6 +40,19 @@ public class TestBase {
         init();
     }
 
+     @BeforeClass
+    public static void setupScreenshotsFolder() {
+        try {
+            Path screenshotsDir = Paths.get("screenshots");
+            if (!Files.exists(screenshotsDir)) {
+                Files.createDirectory(screenshotsDir);
+                System.out.println("[init] Created screenshots/ directory");
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void init() {        
         beforeBrowserStartTS = System.currentTimeMillis();
         driver = new RemoteWebDriver(chrome.getSeleniumAddress(), new ChromeOptions());
