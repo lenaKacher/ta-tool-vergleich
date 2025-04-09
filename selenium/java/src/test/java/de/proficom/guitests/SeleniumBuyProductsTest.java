@@ -105,7 +105,7 @@ public class SeleniumBuyProductsTest {
         Assert.assertEquals(emptyText.getText(), "Your shopping cart is empty");
         System.out.println("STEP 2 - buy mouse");
         // STEP 2.1 - Go to home page category 'Mice'
-        explicitWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='CONTINUE SHOPPING'])))"
+        explicitWait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//a[text()='CONTINUE SHOPPING']")));
         driver.findElement(By.xpath("//a[text()='CONTINUE SHOPPING']")).click();
         driver.findElement(By.xpath("//div[@class='shop_now_slider']/span[text()='MICE']")).click();
         // STEP 2.2 - Filter for Scroller type 'Scroll Ring' and 'Scroll Ball'
