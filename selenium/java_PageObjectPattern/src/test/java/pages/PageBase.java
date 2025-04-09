@@ -80,4 +80,18 @@ public class PageBase {
         return screen;
     }
 
+    @Rule
+    public TestWatcher screenshotOnFailure = new TestWatcher() {
+        @Override
+        protected void failed(Throwable e, Description description) {
+            File tmp = ((TakesScreenshot) driver).getScreenshotAs(OutputType.FILE);
+            File screenshot = new File("screenshots/FAILED_" + description.getMethodName() + "_" + System.currentTimeMillis() + ".png");
+            try {
+                Files.copy(tmp.toPath(), screenshot.toPath());
+                System.out.println("Saved failed screenshot: " + screenshot.getAbsolutePath());
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+    };
 }
