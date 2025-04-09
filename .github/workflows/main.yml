@@ -223,7 +223,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
            name: playwright-js-screenshots
-           path: test-results/**/*.png
+           path: playwright/js/test-results/**/*.png
            if-no-files-found: ignore
            
   playwright-java:
