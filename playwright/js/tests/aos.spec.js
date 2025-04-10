@@ -54,8 +54,9 @@ test('orders a mouse and a speaker as new user', async ({ page }, testInfo) => {
 
         if (TAKE_SCREENSHOTS) {
             // Make a screenshot (Cart Text Element)
-            const buffer = await page.locator("//DIV[@id='shoppingCart']/DIV/LABEL").screenshot();
-            await testInfo.attach("01_shopping_cart_is_empty", { body: buffer, contentType: 'image/png' });
+            const path = `screenshots/01_cart.png`;
+            const buffer = await page.locator("//DIV[@id='shoppingCart']/DIV/LABEL").screenshot({ path });
+            await testInfo.attach("01_cart", { body: buffer, contentType: 'image/png' });
         }
     });
 
@@ -76,6 +77,7 @@ test('orders a mouse and a speaker as new user', async ({ page }, testInfo) => {
 
         if (TAKE_SCREENSHOTS) {
             // Make a screenshot (Full Page)
+            const screenshotPath = `screenshots/02_filter_set.png`;
             const buffer = await page.screenshot({ fullPage: true });
             await testInfo.attach("02_filter_set", { body: buffer, contentType: 'image/png' });
         }
