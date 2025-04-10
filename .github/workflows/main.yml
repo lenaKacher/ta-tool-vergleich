@@ -205,8 +205,10 @@ jobs:
               npm run test || true
           done           
           cp timings.csv playwright-js.csv
+        env:
+          TAKE_SCREENSHOTS: "true"
    
-      - name: Copy timings.csv to playwright-js.csv
+      - name: C opy timings.csv to playwright-js.csv
         uses: actions/upload-artifact@v4
         with:
           name: playwright-js.csv
@@ -260,7 +262,6 @@ jobs:
           ln -s /opt/apache-maven-$MAVEN_VERSION/bin/mvn /usr/bin/mvn
           
       - name: Run Playwright Java Tests
-        if: inputs.RUN_PLAYWRIGHT_JAVA
         run: |
           cd playwright/java
           mvn exec:java -e -Dexec.mainClass=com.microsoft.playwright.CLI -Dexec.args='install-deps' 
