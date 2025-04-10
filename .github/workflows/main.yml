@@ -196,7 +196,6 @@ jobs:
           node-version: '18'
 
       - name: Run Playwright JavaScript Tests
-        if: inputs.RUN_PLAYWRIGHT_JS
         run: |
           cd playwright/js
           npm ci
