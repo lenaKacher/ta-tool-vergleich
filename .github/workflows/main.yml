@@ -327,7 +327,7 @@ jobs:
           for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
               npm run test -- --env screenshot=true || true
           done           
-          cp timings.csv playwright-js.csv
+          cp timings.csv cypress-js.csv
           
       - name: Debug timings.csv and cypress-js.csv
         run: |
