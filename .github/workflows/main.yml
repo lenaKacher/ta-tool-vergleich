@@ -325,7 +325,7 @@ jobs:
           export XDG_RUNTIME_DIR=/tmp/xdg
           mkdir -p $XDG_RUNTIME_DIR
           for i in $(seq 1 ${{ inputs.NUMBER_OF_RUNS }}); do
-              npm run test --env screenshot=true || true
+              npm run test -- --env screenshot=true || true
           done           
           cp timings.csv playwright-js.csv
           
