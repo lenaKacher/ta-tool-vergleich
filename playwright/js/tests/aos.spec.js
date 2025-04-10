@@ -2,8 +2,8 @@ const { test, expect } = require('@playwright/test');
 
 //const BASE_URL = "http://advantage.proficom.de:8080/";
 const BASE_URL = "http://172.16.15.213:8080/"
-const TAKE_SCREENSHOTS = true;
-//const TAKE_SCREENSHOTS = process.env.TAKE_SCREENSHOTS === "true";
+//const TAKE_SCREENSHOTS = false;
+const TAKE_SCREENSHOTS = process.env.TAKE_SCREENSHOTS === "true";
 
 const PRODUCT_DATA = [
     ["HP ROAR PLUS WIRELESS SPEAKER", "BLUE", "2"],
@@ -54,9 +54,10 @@ test('orders a mouse and a speaker as new user', async ({ page }, testInfo) => {
 
         if (TAKE_SCREENSHOTS) {
             // Make a screenshot (Cart Text Element)
-            const path = `screenshots/01_cart.png`;
-            const buffer = await page.locator("//DIV[@id='shoppingCart']/DIV/LABEL").screenshot({ path });
-            await testInfo.attach("01_cart", { body: buffer, contentType: 'image/png' });
+            const name = `01_shopping_cart_is_empty.png`;
+            const path = `screenshots/${name}`;
+            const buffer = await page.screenshot({ fullPage: true, path });
+            await testInfo.attach("01_shopping_cart_is_empty", { body: buffer, contentType: 'image/png' });
         }
     });
 
