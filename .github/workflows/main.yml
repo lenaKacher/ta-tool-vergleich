@@ -270,6 +270,8 @@ jobs:
              mvn clean test || true
           done 
           cp timings.csv playwright-java.csv
+        env:
+          TAKE_SCREENSHOTS: "true"
           
       - name: Debug timings.csv and playwright-java.csv
         run: |
